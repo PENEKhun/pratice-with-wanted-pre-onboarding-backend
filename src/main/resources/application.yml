@@ -1,1 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://127.0.0.1/wanted2023"
+    username: "root"
+    password: "test1234"
+  jpa:
+    database: mysql
+    hibernate:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      ddl-auto: none
+      format_sql: true
+      use_sql_comment: true
+    show-sql: true
 
