@@ -21,6 +21,7 @@ public class JobPosting {
 
   @Column(name = "company_id")
   private Long companyId;
+  private Long id;
 
   @Column(name = "recruit_reward")
   private int recruitReward;
