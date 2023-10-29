@@ -24,11 +24,11 @@ public class JobPosting {
   @Column(name = "recruit_reward")
   private int recruitReward;
 
-  @Column(name = "recruit_position_temp")
-  private Integer recruitPosition;
+  @Column(name = "recruit_position")
+  private String recruitPosition;
 
   @Column(name = "description")
-  private Integer description;
+  private String description;
 
   @Override
   public boolean equals(Object o) {
