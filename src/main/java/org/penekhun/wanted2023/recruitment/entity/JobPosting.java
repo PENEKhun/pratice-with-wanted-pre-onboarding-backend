@@ -5,9 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
+import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 
 @Getter
 @Entity
@@ -17,11 +20,11 @@ public class JobPosting {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "idx")
-  private long id;
-
-  @Column(name = "company_id")
-  private Long companyId;
   private Long id;
+  
+  @OneToOne
+  @JoinColumn(name = "company_id")
+  private EnterpriseUserAccount company;
 
   @Column(name = "recruit_reward")
   private int recruitReward;
@@ -33,8 +36,7 @@ public class JobPosting {
   private String description;
 
   @Builder
-  public JobPosting(Long companyId, int recruitReward, String recruitPosition, String description) {
-    this.companyId = companyId;
+  public JobPosting(int recruitReward, String recruitPosition, String description) {
     this.recruitReward = recruitReward;
     this.recruitPosition = recruitPosition;
     this.description = description;
@@ -61,10 +63,14 @@ public class JobPosting {
   @Override
   public int hashCode() {
     int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + (companyId != null ? companyId.hashCode() : 0);
+    result = 31 * result + (company != null ? company.hashCode() : 0);
     result = 31 * result + recruitReward;
     result = 31 * result + (recruitPosition != null ? recruitPosition.hashCode() : 0);
     result = 31 * result + (description != null ? description.hashCode() : 0);
     return result;
+  }
+
+  public void setCompany(EnterpriseUserAccount company) {
+    this.company = company;
   }
 }
