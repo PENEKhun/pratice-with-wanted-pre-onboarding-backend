@@ -39,6 +39,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
+    // 유효성 검사
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+
     // 개발 편의
     developmentOnly 'org.springframework.boot:spring-boot-devtools:3.0.4'
 
