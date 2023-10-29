@@ -14,7 +14,7 @@ public class EnterpriseUserAccount extends UserAccount {
   @Column(name = "enterprise_nation_code")
   private String nationCode;
 
-  @Column(name = "enterprise_region_code")
-  private String regionCode;
+  @Column(name = "enterprise_province_code")
+  private String provinceCode;
 
 }
