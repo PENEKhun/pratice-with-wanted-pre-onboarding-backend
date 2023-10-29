@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,11 +15,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity(name = "user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
+@EntityListeners(AuditingEntityListener.class)
 public abstract class UserAccount {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,9 +41,11 @@ public abstract class UserAccount {
   @Column(name = "is_ban")
   private boolean isBan = false;
 
+  @CreatedDate
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+  @LastModifiedDate
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
