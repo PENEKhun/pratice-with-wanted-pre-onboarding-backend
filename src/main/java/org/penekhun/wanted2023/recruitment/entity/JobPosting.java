@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -29,6 +30,18 @@ public class JobPosting {
 
   @Column(name = "description")
   private String description;
+
+  @Builder
+  public JobPosting(Long companyId, int recruitReward, String recruitPosition, String description) {
+    this.companyId = companyId;
+    this.recruitReward = recruitReward;
+    this.recruitPosition = recruitPosition;
+    this.description = description;
+  }
+
+  public JobPosting() {
+
+  }
 
   @Override
   public boolean equals(Object o) {
