@@ -12,6 +12,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -31,14 +32,25 @@ public abstract class UserAccount {
   @Column(name = "password")
   private String password;
 
+  @Builder.Default
   @Column(name = "is_ban")
-  private Byte isBan;
+  private boolean isBan = false;
 
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  protected UserAccount(String username, String password, boolean isBan) {
+    this.username = username;
+    this.password = password;
+    this.isBan = isBan;
+  }
+
+  protected UserAccount() {
+
+  }
 
   @Transient
   public String getRole() {
