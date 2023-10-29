@@ -5,7 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("enterprise")
+@DiscriminatorValue("ENTERPRISE")
 public class EnterpriseUserAccount extends UserAccount {
 
   @Column(name = "enterprise_name")

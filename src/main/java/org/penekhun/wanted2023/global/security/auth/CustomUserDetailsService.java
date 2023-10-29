@@ -45,6 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     return new CustomUser(userAccount,
         foundPersonalUser.isPresent(),
-        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userAccount.getRole())));
+        Collections.singletonList(
+            new SimpleGrantedAuthority("ROLE_" + userAccount.getRole().toUpperCase())));
   }
 }

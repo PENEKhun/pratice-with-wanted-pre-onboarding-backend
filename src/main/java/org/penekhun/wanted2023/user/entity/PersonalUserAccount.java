@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import java.time.LocalDate;
 
 @Entity
-@DiscriminatorValue("personal")
+@DiscriminatorValue("PERSONAL")
 public class PersonalUserAccount extends UserAccount {
 
   @Column(name = "personal_name")
