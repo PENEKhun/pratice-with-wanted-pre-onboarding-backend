@@ -52,6 +52,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
     // Fixture Monkey
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.11")
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jakarta-validation:0.6.8")
 }
 
 tasks.named('test') {
