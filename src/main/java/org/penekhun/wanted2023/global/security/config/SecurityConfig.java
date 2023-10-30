@@ -24,16 +24,19 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    /* 기본 설정 */
     http
+        .csrf(AbstractHttpConfigurer::disable)
+        .cors(AbstractHttpConfigurer::disable)
         // 세션을 사용하지 않음.
         .sessionManagement(sessionManagement -> sessionManagement
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        // CSRF 토큰을 사용하지 않음.
-        .csrf(AbstractHttpConfigurer::disable)
         // 기본 로그인 페이지를 사용하지 않음.
         .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable)
+        .httpBasic(AbstractHttpConfigurer::disable);
 
+    /* 별도로 서비스에 필요한 설정 등등... */
+    http
         .authorizeHttpRequests(req -> req
             .anyRequest().permitAll())
 
