@@ -5,8 +5,10 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDate;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
 @DiscriminatorValue("PERSONAL")
 public class PersonalUserAccount extends UserAccount {
 
@@ -22,9 +24,5 @@ public class PersonalUserAccount extends UserAccount {
     super(username, password, isBan);
     this.name = name;
     this.birth = birth;
-  }
-
-  public PersonalUserAccount() {
-    super();
   }
 }
