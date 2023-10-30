@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.penekhun.wanted2023.global.security.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -26,13 +26,13 @@ public class JwtTokenProvider implements InitializingBean {
   private static final String USERNAME = "username";
   private final String secret;
   private final long tokenValidityInMilliseconds;
-  private final UserDetailsService userDetailsService;
+  private final CustomUserDetailsService userDetailsService;
   private Key key;
 
   public JwtTokenProvider(
       @Value("${jwt.secret}") String secret,
       @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
-      UserDetailsService userDetailsService) {
+      CustomUserDetailsService userDetailsService) {
     this.secret = secret;
     this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     this.userDetailsService = userDetailsService;
