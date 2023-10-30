@@ -9,8 +9,6 @@ import org.penekhun.wanted2023.global.security.CurrentUser;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 
 public record JobPostingCreateReq(
-    @CurrentUser
-    EnterpriseUserAccount enterpriseUser,
     @Min(value = 0, message = "채용 보상금은 0원 이상이어야 합니다.")
     @Max(value = 100000000, message = "채용 보상금은 1억원 이하로 입력해주세요.")
     int recruitReward,

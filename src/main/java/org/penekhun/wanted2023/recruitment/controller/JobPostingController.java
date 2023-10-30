@@ -3,9 +3,11 @@ package org.penekhun.wanted2023.recruitment.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.penekhun.wanted2023.global.rest_controller.ApiResponse;
+import org.penekhun.wanted2023.global.security.CurrentUser;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
+import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +23,8 @@ public class JobPostingController {
 
   @Secured("ROLE_ENTERPRISE")
   @PostMapping("/job-posting")
-  public JobPostingCreateRes createJobPosting(
   public ApiResponse<JobPostingCreateRes> createJobPosting(
+      @CurrentUser EnterpriseUserAccount enterpriseUser,
       @Valid @RequestBody JobPostingCreateReq jobPostingReq) {
     return ApiResponse.ok(jobPostingService.createJobPosting(enterpriseUser, jobPostingReq));
   }
