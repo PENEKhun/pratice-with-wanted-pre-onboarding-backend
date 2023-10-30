@@ -5,6 +5,7 @@ import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.entity.JobPosting;
 import org.penekhun.wanted2023.recruitment.repository.JobPostingRepository;
+import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,11 @@ public class JobPostingService {
     }
 
     JobPosting jobPosting = JobPosting.builder()
-        .companyId(jobPostingReq.enterpriseUser().getId())
         .description(jobPostingReq.description())
         .recruitPosition(jobPostingReq.recruitPosition())
         .recruitReward(jobPostingReq.recruitReward())
         .build();
-
+    jobPosting.setCompany(enterpriseUser);
     jobPostingRepository.save(jobPosting);
 
     return new JobPostingCreateRes(
