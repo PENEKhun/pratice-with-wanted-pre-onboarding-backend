@@ -1,5 +1,6 @@
 package org.penekhun.wanted2023.recruitment.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
@@ -32,12 +33,11 @@ public class JobPostingService {
     jobPosting.setCompany(enterpriseUser);
     jobPostingRepository.save(jobPosting);
 
-    return new JobPostingCreateRes(
-        jobPosting.getId(),
-        jobPosting.getCompanyId(),
-        jobPosting.getRecruitReward(),
-        jobPosting.getRecruitPosition(),
-        jobPosting.getDescription()
-    );
+    return JobPostingCreateRes.builder()
+        .id(jobPosting.getId())
+        .recruitReward(jobPosting.getRecruitReward())
+        .recruitPosition(jobPosting.getRecruitPosition())
+        .description(jobPosting.getDescription())
+        .build();
   }
 }
