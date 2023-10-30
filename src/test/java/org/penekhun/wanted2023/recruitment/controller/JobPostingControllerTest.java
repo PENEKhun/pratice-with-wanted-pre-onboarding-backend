@@ -2,7 +2,7 @@ package org.penekhun.wanted2023.recruitment.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,14 +36,20 @@ class JobPostingControllerTest {
   @DisplayName("채용 공고 생성시에")
   class create_job_posting {
 
-    @TestWithPersonalAccount
-    @DisplayName("개인 계정은 채용 공고 생성 권한이 없습니다.")
-    void personal_cant_create_jobPosting() throws Exception {
-      mockMvc
-          .perform(
-              post("/api/v1/job-posting")
-                  .with(csrf()))
-          .andExpect(status().isBadRequest());
+    @Nested
+    @DisplayName("개인 계정은")
+    class with_personal_account {
+
+      @TestWithPersonalAccount
+      @DisplayName("개인 계정은 채용 공고 생성 권한이 없습니다.")
+      void personal_cant_create_jobPosting() throws Exception {
+        mockMvc
+            .perform(
+                post("/api/v1/job-posting")
+                    .with(csrf()))
+            .andExpect(status().isBadRequest());
+      }
+
     }
 
     @Nested
@@ -66,7 +72,6 @@ class JobPostingControllerTest {
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)))
-            .andDo(print())
             .andExpect(status().isOk());
       }
 
@@ -74,9 +79,10 @@ class JobPostingControllerTest {
       @DisplayName("채용 보상금이 음수라면, 400 응답을 받습니다.")
       void reward_valid_err() throws Exception {
         // given
+        String given = "-1";
         Map<String, String> input = new HashMap<>();
         input.put("recruitPosition", "개발자");
-        input.put("recruitReward", "-1");
+        input.put("recruitReward", given);
         input.put("description", "개발자를 모집합니다.");
 
         // when & then
@@ -86,16 +92,16 @@ class JobPostingControllerTest {
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)))
-            .andDo(print())
             .andExpect(status().isBadRequest());
       }
 
       @TestWithEnterpriseAccount
-      @DisplayName("채용 포지션이 Null 이라면, 400 응답을 받습니다.")
+      @DisplayName("채용 포지션이 null 이라면, 400 응답을 받습니다.")
       void position_null_valid_err() throws Exception {
         // given
+        String given = null;
         Map<String, String> input = new HashMap<>();
-        input.put("recruitPosition", null);
+        input.put("recruitPosition", given);
         input.put("recruitReward", "10000");
         input.put("description", "개발자를 모집합니다.");
 
@@ -106,16 +112,18 @@ class JobPostingControllerTest {
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)))
-            .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.data").value("채용 포지션을 입력해주세요."));
       }
 
       @TestWithEnterpriseAccount
-      @DisplayName("채용 포지션이 '' 이라면, 400 응답을 받습니다.")
-      void position_valid_err() throws Exception {
+      @DisplayName("채용 포지션이 길다면, 400 응답을 받습니다.")
+      void position_len_valid_err() throws Exception {
         // given
+        String given = "a".repeat(31);
         Map<String, String> input = new HashMap<>();
-        input.put("recruitPosition", "");
+        input.put("recruitPosition", given);
         input.put("recruitReward", "10000");
         input.put("description", "개발자를 모집합니다.");
 
@@ -126,8 +134,9 @@ class JobPostingControllerTest {
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)))
-            .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpectAll(
+                status().isBadRequest(),
+                jsonPath("$.data").value("채용 포지션은 30자 이하로 입력해주세요."));
       }
     }
   }
