@@ -30,11 +30,7 @@ public class CustomUser extends User {
   }
 
   public UserAccount getAccount() {
-    if (isPersonalUser) {
-      return personalUser;
-    } else {
-      return enterpriseUser;
-    }
+    return isPersonalUser ? personalUser : enterpriseUser;
   }
 
 }
