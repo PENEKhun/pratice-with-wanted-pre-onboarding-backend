@@ -2,6 +2,7 @@ package org.penekhun.wanted2023.recruitment.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.penekhun.wanted2023.global.rest_controller.ApiResponse;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
@@ -21,8 +22,9 @@ public class JobPostingController {
   @Secured("ROLE_ENTERPRISE")
   @PostMapping("/job-posting")
   public JobPostingCreateRes createJobPosting(
+  public ApiResponse<JobPostingCreateRes> createJobPosting(
       @Valid @RequestBody JobPostingCreateReq jobPostingReq) {
-    return jobPostingService.createJobPosting(jobPostingReq);
+    return ApiResponse.ok(jobPostingService.createJobPosting(enterpriseUser, jobPostingReq));
   }
 
 }

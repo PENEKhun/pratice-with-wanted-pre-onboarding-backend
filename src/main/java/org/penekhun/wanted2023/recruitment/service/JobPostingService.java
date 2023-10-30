@@ -17,8 +17,9 @@ public class JobPostingService {
   private final JobPostingRepository jobPostingRepository;
 
   @Transactional
-  public JobPostingCreateRes createJobPosting(JobPostingCreateReq jobPostingReq) {
-    if (jobPostingReq.enterpriseUser() == null) {
+  public JobPostingCreateRes createJobPosting(EnterpriseUserAccount enterpriseUser,
+      @Valid JobPostingCreateReq jobPostingReq) {
+    if (enterpriseUser == null) {
       throw new BadCredentialsException("Invalid enterprise user");
     }
 
