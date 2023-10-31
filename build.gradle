@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.5'
     id 'io.spring.dependency-management' version '1.1.3'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'org.penekhun'
@@ -15,6 +16,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExt
 }
 
 repositories {
@@ -53,8 +55,38 @@ dependencies {
     // Fixture Monkey
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.11")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jakarta-validation:0.6.8")
+    // REST Docs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+ext { // 전역 변수
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+
+    sources {
+        // index.adoc 파일만 html로 변환
+        include '**/index.adoc'
+    }
+    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
+    dependsOn test // 테스트 후에 실행 되겠끔 설정
+}
+
+bootJar {
+    dependsOn asciidoctor // test -> asciidoctor -> bootJar 순으로 실행
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs' // build/generated-snippets 에 있는 파일들을 static/docs 에 복사
+    }
 }
