@@ -1,6 +1,7 @@
 package org.penekhun.wanted2023.recruitment.service;
 
 import jakarta.validation.Valid;
+import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
@@ -17,6 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class JobPostingService {
 
   private final JobPostingRepository jobPostingRepository;
+
+  private Predicate<JobPosting> myJobPost(
+      EnterpriseUserAccount enterpriseUser) {
+    return jobPosting -> jobPosting.getCompany().equals(enterpriseUser);
+  }
 
   @Transactional
   public JobPostingCreateRes createJobPosting(EnterpriseUserAccount enterpriseUser,
@@ -39,5 +45,12 @@ public class JobPostingService {
         .recruitPosition(jobPosting.getRecruitPosition())
         .description(jobPosting.getDescription())
         .build();
+  }
+
+  @Transactional
+  public void deleteMyJobPosting(EnterpriseUserAccount enterpriseUser, Long jobPostId) {
+    jobPostingRepository.findById(jobPostId)
+        .filter(myJobPost(enterpriseUser))
+        .ifPresent(jobPostingRepository::delete);
   }
 }
