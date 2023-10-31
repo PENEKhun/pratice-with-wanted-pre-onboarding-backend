@@ -1,0 +1,11 @@
+== 채용공고 등록
+
+=== Request
+
+include::{snippets}/job-posting/create/http-request.adoc[]
+include::{snippets}/job-posting/create/request-fields.adoc[]
+
+=== Response
+
+include::{snippets}/job-posting/create/http-response.adoc[]
+include::{snippets}/job-posting/create/response-fields.adoc[]
