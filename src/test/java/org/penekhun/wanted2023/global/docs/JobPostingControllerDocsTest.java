@@ -3,10 +3,6 @@ package org.penekhun.wanted2023.global.docs;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -56,9 +52,7 @@ public class JobPostingControllerDocsTest extends RestDocsSupport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input)))
         .andExpect(status().isOk())
-        .andDo(document("job-posting/create",
-            preprocessRequest(prettyPrint()),
-            preprocessResponse(prettyPrint()),
+        .andDo(restDocs.document(
             requestFields(
                 fieldWithPath("recruitPosition")
                     .type(JsonFieldType.STRING)
@@ -71,31 +65,24 @@ public class JobPostingControllerDocsTest extends RestDocsSupport {
                     .type(JsonFieldType.STRING)
                     .description("채용 공고 설명")
             ),
-            responseFields(
-                fieldWithPath("code")
-                    .type(JsonFieldType.NUMBER)
-                    .description("응답 코드"),
-                fieldWithPath("status")
-                    .type(JsonFieldType.STRING)
-                    .description("응답 상태"),
-                fieldWithPath("message")
-                    .type(JsonFieldType.STRING)
-                    .description("응답 메시지"),
-                fieldWithPath("data")
-                    .type(JsonFieldType.OBJECT),
-                fieldWithPath("data.id")
-                    .type(JsonFieldType.NUMBER)
-                    .description("채용 공고 ID"),
-                fieldWithPath("data.recruitPosition")
-                    .type(JsonFieldType.STRING)
-                    .description("채용 포지션"),
-                fieldWithPath("data.recruitReward")
-                    .type(JsonFieldType.NUMBER)
-                    .description("채용 보상"),
-                fieldWithPath("data.description")
-                    .type(JsonFieldType.STRING)
-                    .description("채용 공고 설명")
-            )
-        ));
+            responseFields(this.responseCommon())
+                .and(
+                    fieldWithPath("data")
+                        .type(JsonFieldType.OBJECT),
+                    fieldWithPath("data.id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("채용 공고 ID"),
+                    fieldWithPath("data.recruitPosition")
+                        .type(JsonFieldType.STRING)
+                        .description("채용 포지션"),
+                    fieldWithPath("data.recruitReward")
+                        .type(JsonFieldType.NUMBER)
+                        .description("채용 보상"),
+                    fieldWithPath("data.description")
+                        .type(JsonFieldType.STRING)
+                        .description("채용 공고 설명")
+                )
+        ))
+        .andReturn();
   }
 }
