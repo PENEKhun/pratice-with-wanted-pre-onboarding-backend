@@ -10,6 +10,7 @@ import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.entity.JobPosting;
 import org.penekhun.wanted2023.recruitment.repository.JobPostingRepository;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,5 +63,9 @@ public class JobPostingService {
             () -> {
               throw new CustomException(ExceptionCode.INVALID_REQUEST);
             });
+  }
+
+  public PageImpl getJobPostings() {
+    return null;
   }
 }

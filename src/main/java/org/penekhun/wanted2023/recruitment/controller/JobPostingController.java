@@ -13,6 +13,7 @@ import org.penekhun.wanted2023.recruitment.service.JobPostingService;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class JobPostingController {
 
   private final JobPostingService jobPostingService;
+
+  @GetMapping("/job-posting")
+  public ApiResponse<?> getJobPostings() {
+    return ApiResponse.ok(jobPostingService.getJobPostings());
+  }
 
   @Secured("ROLE_ENTERPRISE")
   @PostMapping("/job-posting")
