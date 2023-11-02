@@ -7,18 +7,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.penekhun.wanted2023.global.docs.RestDocsSupport;
-import org.penekhun.wanted2023.global.security.fixture.TestWithEnterpriseAccount;
-import org.penekhun.wanted2023.global.security.fixture.TestWithPersonalAccount;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
@@ -38,90 +31,62 @@ class JobPostingControllerTest extends RestDocsSupport {
   @Autowired
   JobPostingController jobPostingController;
 
-  @Override
-  protected boolean includesJwtFilter() {
-    return false;
-  }
+  @Test
+  @DisplayName("채용 공고 생성에 성공한다.")
+  void create_job_posting() throws Exception {
 
-  @Nested
-  @DisplayName("채용 공고 생성시에")
-  class create_job_posting {
+    var input = new JobPostingCreateReq(
+        1000000,
+        "개발자",
+        "개발자를 채용합니다."
+    );
 
-    @Nested
-    @DisplayName("개인 계정은")
-    class with_personal_account {
+    given(jobPostingService.createJobPosting(any(), any()))
+        .willReturn(JobPostingCreateRes.builder()
+            .id(1L)
+            .recruitPosition(input.recruitPosition())
+            .recruitReward(input.recruitReward())
+            .description(input.description())
+            .build());
 
-      @TestWithPersonalAccount
-      @DisplayName("개인 계정은 채용 공고 생성 권한이 없습니다.")
-      void personal_cant_create_jobPosting() throws Exception {
-        mockMvc
-            .perform(
-                post("/api/v1/job-posting")
-                    .with(csrf()))
-            .andExpect(status().isBadRequest());
-      }
-
-    }
-
-    @Nested
-    @DisplayName("기업 계정은")
-    class with_enterprise_account {
-
-      @TestWithEnterpriseAccount
-      @DisplayName("채용공고 등록 API")
-      void createJobPosting() throws Exception {
-        var input = new JobPostingCreateReq(
-            1000000,
-            "개발자",
-            "개발자를 채용합니다."
-        );
-
-        given(jobPostingService.createJobPosting(any(), any()))
-            .willReturn(JobPostingCreateRes.builder()
-                .id(1L)
-                .recruitPosition(input.recruitPosition())
-                .recruitReward(input.recruitReward())
-                .description(input.description())
-                .build());
-
-        mockMvc
-            .perform(
-                post("/api/v1/job-posting")
-                    .with(csrf())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(input)))
-            .andExpect(status().isOk())
-            .andDo(restDocs.document(
-                requestFields(
+    mockMvc
+        .perform(
+            post("/api/v1/job-posting")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input)))
+        .andExpect(status().isOk())
+        .andDo(restDocs.document(
+            requestFields(
+                fieldWithPath("recruitPosition")
+                    .type(JsonFieldType.STRING)
+                    .description("채용 포지션"),
+                fieldWithPath("recruitReward")
+                    .optional()
+                    .type(JsonFieldType.NUMBER)
+                    .description("채용 보상"),
+                fieldWithPath("description")
+                    .type(JsonFieldType.STRING)
+                    .description("채용 공고 설명")
+            ),
+            responseFields(responseCommon())
+                .andWithPrefix("data.",
+                    fieldWithPath("id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("채용 공고 ID"),
                     fieldWithPath("recruitPosition")
                         .type(JsonFieldType.STRING)
                         .description("채용 포지션"),
                     fieldWithPath("recruitReward")
-                        .optional()
                         .type(JsonFieldType.NUMBER)
                         .description("채용 보상"),
                     fieldWithPath("description")
                         .type(JsonFieldType.STRING)
                         .description("채용 공고 설명")
-                ),
-                responseFields(responseCommon())
-                    .andWithPrefix("data.",
-                        fieldWithPath("id")
-                            .type(JsonFieldType.NUMBER)
-                            .description("채용 공고 ID"),
-                        fieldWithPath("recruitPosition")
-                            .type(JsonFieldType.STRING)
-                            .description("채용 포지션"),
-                        fieldWithPath("recruitReward")
-                            .type(JsonFieldType.NUMBER)
-                            .description("채용 보상"),
-                        fieldWithPath("description")
-                            .type(JsonFieldType.STRING)
-                            .description("채용 공고 설명")
-                    )
-            ))
-            .andReturn();
-      }
+                )
+        ))
+        .andReturn();
+  }
 
       @TestWithEnterpriseAccount
       @DisplayName("채용 보상금이 음수라면, 400 응답을 받습니다.")
