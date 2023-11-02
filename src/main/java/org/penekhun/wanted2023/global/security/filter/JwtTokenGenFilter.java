@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtTokenGenFilter extends UsernamePasswordAuthenticationFilter {
 
   public static final String AUTHORIZATION_HEADER = "Authorization";
-  private static final String LOGIN_URI = "/api/v1/login";
+  protected static final String LOGIN_URI = "/api/v1/login";
   private static final String TOKEN_PREFIX = "Bearer ";
 
   private final JwtTokenProvider tokenProvider;
