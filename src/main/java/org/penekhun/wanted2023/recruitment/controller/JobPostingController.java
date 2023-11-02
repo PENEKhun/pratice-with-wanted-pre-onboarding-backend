@@ -12,6 +12,7 @@ import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class JobPostingController {
 
   @Secured("ROLE_ENTERPRISE")
   @ResponseStatus(NO_CONTENT)
-  @PostMapping("/job-posting/{jobPostId}")
+  @DeleteMapping("/job-posting/{jobPostId}")
   public void deleteMyJobPosting(
       @CurrentUser EnterpriseUserAccount enterpriseUser,
       @NotNull @PathVariable Long jobPostId) {
