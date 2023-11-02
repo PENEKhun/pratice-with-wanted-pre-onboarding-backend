@@ -9,5 +9,8 @@ endif::[]
 :toclevels: 4
 :sectlinks:
 
+[[authentication]]
+include::domain/authentication.adoc[]
+
 [[job-posting]]
 include::domain/job-posting.adoc[]

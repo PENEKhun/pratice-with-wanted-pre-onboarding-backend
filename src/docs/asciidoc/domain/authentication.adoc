@@ -1,0 +1,13 @@
+== Login
+
+=== Request
+
+include::{snippets}/jwt-token-gen-filter-test/working_login_filter/http-request.adoc[]
+include::{snippets}/jwt-token-gen-filter-test/working_login_filter/request-fields.adoc[]
+
+=== Response
+
+Authorization 헤더에 토큰이 담겨져 나온다.
+
+include::{snippets}/jwt-token-gen-filter-test/working_login_filter/http-response.adoc[]
+
