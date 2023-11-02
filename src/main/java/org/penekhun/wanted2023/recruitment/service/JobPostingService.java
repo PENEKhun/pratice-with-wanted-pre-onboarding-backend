@@ -3,6 +3,8 @@ package org.penekhun.wanted2023.recruitment.service;
 import jakarta.validation.Valid;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.penekhun.wanted2023.global.exception.CustomException;
+import org.penekhun.wanted2023.global.exception.ExceptionCode;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.entity.JobPosting;
@@ -49,8 +51,16 @@ public class JobPostingService {
 
   @Transactional
   public void deleteMyJobPosting(EnterpriseUserAccount enterpriseUser, Long jobPostId) {
+    if (enterpriseUser == null || jobPostId == null) {
+      throw new CustomException(ExceptionCode.INVALID_REQUEST);
+    }
+
     jobPostingRepository.findById(jobPostId)
         .filter(myJobPost(enterpriseUser))
-        .ifPresent(jobPostingRepository::delete);
+        .ifPresentOrElse(
+            jobPostingRepository::delete,
+            () -> {
+              throw new CustomException(ExceptionCode.INVALID_REQUEST);
+            });
   }
 }
