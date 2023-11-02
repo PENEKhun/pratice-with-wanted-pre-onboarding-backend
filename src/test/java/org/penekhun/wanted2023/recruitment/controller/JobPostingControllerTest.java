@@ -1,36 +1,47 @@
 package org.penekhun.wanted2023.recruitment.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.penekhun.wanted2023.global.docs.RestDocsSupport;
 import org.penekhun.wanted2023.global.security.fixture.TestWithEnterpriseAccount;
 import org.penekhun.wanted2023.global.security.fixture.TestWithPersonalAccount;
+import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
+import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(controllers = JobPostingController.class)
 @DisplayName("채용공고 컨트롤러 테스트")
-class JobPostingControllerTest {
-
-  @Autowired
-  private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
+class JobPostingControllerTest extends RestDocsSupport {
 
   @MockBean
-  private JobPostingService jobPostingService;
+  JobPostingService jobPostingService;
+
+  @Autowired
+  JobPostingController jobPostingController;
+
+  @Override
+  protected boolean includesJwtFilter() {
+    return false;
+  }
 
   @Nested
   @DisplayName("채용 공고 생성시에")
@@ -57,22 +68,59 @@ class JobPostingControllerTest {
     class with_enterprise_account {
 
       @TestWithEnterpriseAccount
-      @DisplayName("정상 입력값으로 채용 공고 생성시 200 OK 응답을 받습니다.")
-      void happy() throws Exception {
-        // given
-        Map<String, String> input = new HashMap<>();
-        input.put("recruitPosition", "개발자");
-        input.put("recruitReward", "10000");
-        input.put("description", "개발자를 모집합니다.");
+      @DisplayName("채용공고 등록 API")
+      void createJobPosting() throws Exception {
+        var input = new JobPostingCreateReq(
+            1000000,
+            "개발자",
+            "개발자를 채용합니다."
+        );
 
-        // when & then
+        given(jobPostingService.createJobPosting(any(), any()))
+            .willReturn(JobPostingCreateRes.builder()
+                .id(1L)
+                .recruitPosition(input.recruitPosition())
+                .recruitReward(input.recruitReward())
+                .description(input.description())
+                .build());
+
         mockMvc
             .perform(
                 post("/api/v1/job-posting")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andDo(restDocs.document(
+                requestFields(
+                    fieldWithPath("recruitPosition")
+                        .type(JsonFieldType.STRING)
+                        .description("채용 포지션"),
+                    fieldWithPath("recruitReward")
+                        .optional()
+                        .type(JsonFieldType.NUMBER)
+                        .description("채용 보상"),
+                    fieldWithPath("description")
+                        .type(JsonFieldType.STRING)
+                        .description("채용 공고 설명")
+                ),
+                responseFields(responseCommon())
+                    .andWithPrefix("data.",
+                        fieldWithPath("id")
+                            .type(JsonFieldType.NUMBER)
+                            .description("채용 공고 ID"),
+                        fieldWithPath("recruitPosition")
+                            .type(JsonFieldType.STRING)
+                            .description("채용 포지션"),
+                        fieldWithPath("recruitReward")
+                            .type(JsonFieldType.NUMBER)
+                            .description("채용 보상"),
+                        fieldWithPath("description")
+                            .type(JsonFieldType.STRING)
+                            .description("채용 공고 설명")
+                    )
+            ))
+            .andReturn();
       }
 
       @TestWithEnterpriseAccount
@@ -112,6 +160,7 @@ class JobPostingControllerTest {
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(input)))
+            .andDo(print())
             .andExpectAll(
                 status().isBadRequest(),
                 jsonPath("$.data").value("채용 포지션을 입력해주세요."));
@@ -138,6 +187,34 @@ class JobPostingControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.data").value("채용 포지션은 30자 이하로 입력해주세요."));
       }
+    }
+  }
+
+  @Nested
+  @Disabled
+  @DisplayName("채용 공고 삭제시에")
+  class delete_job_posting {
+
+    @Nested
+    @DisplayName("개인 계정은")
+    class with_personal_account {
+
+      @TestWithPersonalAccount
+      @DisplayName("401 응답을 받습니다.")
+      void personal_cant_delete_jobPosting() throws Exception {
+        mockMvc
+            .perform(
+                post("/api/v1/job-posting/1")
+                    .with(csrf()))
+            .andExpect(status().isBadRequest());
+      }
+
+    }
+
+    @Nested
+    @DisplayName("기업 계정은")
+    class with_enterprise_account {
+
     }
   }
 }
