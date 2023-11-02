@@ -2,10 +2,10 @@
 
 === Request
 
-include::{snippets}/job-posting-controller-docs-test/create-job-posting/http-request.adoc[]
-include::{snippets}/job-posting-controller-docs-test/create-job-posting/request-fields.adoc[]
+include::{snippets}/job-posting-controller-test/create_job_posting/http-request.adoc[]
+include::{snippets}/job-posting-controller-test/create_job_posting/request-fields.adoc[]
 
 === Response
 
-include::{snippets}/job-posting-controller-docs-test/create-job-posting/http-response.adoc[]
-include::{snippets}/job-posting-controller-docs-test/create-job-posting/response-fields.adoc[]
+include::{snippets}/job-posting-controller-test/create_job_posting/http-response.adoc[]
+include::{snippets}/job-posting-controller-test/create_job_posting/response-fields.adoc[]
