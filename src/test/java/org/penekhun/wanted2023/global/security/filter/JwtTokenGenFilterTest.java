@@ -51,10 +51,12 @@ class JwtTokenGenFilterTest extends RestDocsSupport {
 
     mockMvc.perform(MockMvcRequestBuilders.post(JwtTokenGenFilter.LOGIN_URI)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(
-                objectMapper.writeValueAsString(
-                    new JwtTokenGenFilter.UserLogin("username", "password")
-                )))
+            .content("""
+                {
+                  "username": "username",
+                  "password": "password"
+                }
+                """))
         .andDo(print())
         .andDo(
             restDocs.document(
@@ -66,7 +68,7 @@ class JwtTokenGenFilterTest extends RestDocsSupport {
                         .type(JsonFieldType.STRING)
                         .description("비밀번호")),
                 responseHeaders(
-                    headerWithName("Authorization")
+                    headerWithName(JwtTokenGenFilter.AUTHORIZATION_HEADER)
                         .description("인증 토큰을 포함하는 헤더")
                 )
             ));
