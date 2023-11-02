@@ -9,3 +9,14 @@ include::{snippets}/job-posting-controller-test/create_job_posting/request-field
 
 include::{snippets}/job-posting-controller-test/create_job_posting/http-response.adoc[]
 include::{snippets}/job-posting-controller-test/create_job_posting/response-fields.adoc[]
+
+== 채용공고 삭제
+
+=== Request
+
+include::{snippets}/job-posting-controller-test/delete_job_posting/http-request.adoc[]
+include::{snippets}/job-posting-controller-test/delete_job_posting/path-parameters.adoc[]
+
+=== Response
+
+include::{snippets}/job-posting-controller-test/delete_job_posting/http-response.adoc[]
