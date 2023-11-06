@@ -20,6 +20,7 @@ import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
+import org.penekhun.wanted2023.user.dto.EnterpriseUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -103,7 +104,7 @@ class JobPostingControllerTest extends RestDocsSupport {
   }
 
   @Test
-  @DisplayName("채용 공고 조회에 성공한다")
+  @DisplayName("채용 공고 조회에 성공한다.")
   void search_job_posting_withPage() throws Exception {
     var item = JobPostingSearchRes.builder()
         .id(1L)
@@ -111,11 +112,18 @@ class JobPostingControllerTest extends RestDocsSupport {
         .recruitReward(1000000)
         .description("개발자를 채용합니다.")
         .requiredSkill("python")
+        .enterprise(
+            EnterpriseUserRes.builder()
+                .id(1L)
+                .name("naver")
+                .nationCode("KR")
+                .provinceCode("경기도")
+                .build()
+        )
         .build();
-    var results = Collections.singletonList(item);
 
     when(jobPostingService.getJobPostings(any()))
-        .thenReturn(new PageImpl<>(results));
+        .thenReturn(new PageImpl<>(Collections.singletonList(item)));
 
     mockMvc
         .perform(
@@ -129,8 +137,7 @@ class JobPostingControllerTest extends RestDocsSupport {
                     requestPageable()
                 ),
                 responseFields(
-                    responseCommon()
-                )
+                    responseCommon())
                     .and(responsePage())
                     .andWithPrefix("data.content[].",
                         fieldWithPath("id")
@@ -147,7 +154,23 @@ class JobPostingControllerTest extends RestDocsSupport {
                             .description("채용 공고 설명"),
                         fieldWithPath("requiredSkill")
                             .type(JsonFieldType.STRING)
-                            .description("사용 기술")
+                            .description("사용 기술"),
+                        fieldWithPath("enterprise")
+                            .type(JsonFieldType.OBJECT)
+                            .description("채용 기업 정보")
+                    ).andWithPrefix("data.content[].enterprise.",
+                        fieldWithPath("id")
+                            .type(JsonFieldType.NUMBER)
+                            .description("기업 ID"),
+                        fieldWithPath("name")
+                            .type(JsonFieldType.STRING)
+                            .description("기업 이름"),
+                        fieldWithPath("nationCode")
+                            .type(JsonFieldType.STRING)
+                            .description("기업 국가 코드"),
+                        fieldWithPath("provinceCode")
+                            .type(JsonFieldType.STRING)
+                            .description("기업 지역 코드")
                     )
             ));
   }
