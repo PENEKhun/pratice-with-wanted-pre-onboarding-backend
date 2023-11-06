@@ -11,7 +11,6 @@ import org.penekhun.wanted2023.recruitment.entity.JobPosting;
 import org.penekhun.wanted2023.recruitment.repository.JobPostingRepository;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,7 @@ public class JobPostingService {
   public JobPostingCreateRes createJobPosting(EnterpriseUserAccount enterpriseUser,
       @Valid JobPostingCreateReq jobPostingReq) {
     if (enterpriseUser == null) {
-      throw new BadCredentialsException("Invalid enterprise user");
+      throw new CustomException(ExceptionCode.INVALID_REQUEST);
     }
 
     JobPosting jobPosting = JobPosting.builder()
