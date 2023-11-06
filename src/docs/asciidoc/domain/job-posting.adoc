@@ -20,6 +20,7 @@ include::{snippets}/job-posting-controller-test/search_job_posting_with-page/pat
 == Response
 
 include::{snippets}/job-posting-controller-test/search_job_posting_with-page/http-response.adoc[]
+include::{snippets}/job-posting-controller-test/search_job_posting_with-page/response-fields.adoc[]
 
 == 채용공고 삭제
 
