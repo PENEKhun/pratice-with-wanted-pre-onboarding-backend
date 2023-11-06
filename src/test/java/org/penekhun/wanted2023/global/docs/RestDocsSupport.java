@@ -76,7 +76,6 @@ public abstract class RestDocsSupport {
     };
   }
 
-
   protected FieldDescriptor[] responsePage() {
     return new FieldDescriptor[]{
         fieldWithPath("data.pageable")
