@@ -10,8 +10,11 @@ import org.penekhun.wanted2023.global.security.CurrentUser;
 import org.penekhun.wanted2023.global.security.dto.SecurityRole.ROLES;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
+import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +33,8 @@ public class JobPostingController {
   private final JobPostingService jobPostingService;
 
   @GetMapping("/job-posting")
-  public ApiResponse<?> getJobPostings() {
-    return ApiResponse.ok(jobPostingService.getJobPostings());
+  public ApiResponse<Page<JobPostingSearchRes>> getJobPostings(Pageable pageable) {
+    return ApiResponse.ok(jobPostingService.getJobPostings(pageable));
   }
 
   @Secured(ROLES.ENTERPRISE)

@@ -7,10 +7,13 @@ import org.penekhun.wanted2023.global.exception.CustomException;
 import org.penekhun.wanted2023.global.exception.ExceptionCode;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
+import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
 import org.penekhun.wanted2023.recruitment.entity.JobPosting;
 import org.penekhun.wanted2023.recruitment.repository.JobPostingRepository;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +69,14 @@ public class JobPostingService {
             });
   }
 
-  public PageImpl getJobPostings() {
-    return null;
+  public Page<JobPostingSearchRes> getJobPostings(Pageable pageable) {
+    Page<JobPosting> result = jobPostingRepository.findAll(pageable);
+    return new PageImpl<>(
+        result.getContent().stream()
+            .map(JobPostingSearchRes::from)
+            .toList(),
+        pageable,
+        result.getTotalElements()
+    );
   }
 }
