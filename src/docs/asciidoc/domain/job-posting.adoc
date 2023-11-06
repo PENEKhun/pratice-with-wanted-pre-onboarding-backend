@@ -10,6 +10,17 @@ include::{snippets}/job-posting-controller-test/create_job_posting/request-field
 include::{snippets}/job-posting-controller-test/create_job_posting/http-response.adoc[]
 include::{snippets}/job-posting-controller-test/create_job_posting/response-fields.adoc[]
 
+== 채용공고 조회
+
+=== Request
+
+include::{snippets}/job-posting-controller-test/search_job_posting_with-page/http-request.adoc[]
+include::{snippets}/job-posting-controller-test/search_job_posting_with-page/path-parameters.adoc[]
+
+== Response
+
+include::{snippets}/job-posting-controller-test/search_job_posting_with-page/http-response.adoc[]
+
 == 채용공고 삭제
 
 === Request

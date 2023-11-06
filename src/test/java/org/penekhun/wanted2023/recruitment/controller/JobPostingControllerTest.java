@@ -2,6 +2,7 @@ package org.penekhun.wanted2023.recruitment.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -11,15 +12,18 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.penekhun.wanted2023.global.docs.RestDocsSupport;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
+import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -97,6 +101,56 @@ class JobPostingControllerTest extends RestDocsSupport {
                 )
         ))
         .andReturn();
+  }
+
+  @Test
+  @DisplayName("채용 공고 조회에 성공한다")
+  void search_job_posting_withPage() throws Exception {
+    var item = JobPostingSearchRes.builder()
+        .id(1L)
+        .recruitPosition("개발자")
+        .recruitReward(1000000)
+        .description("개발자를 채용합니다.")
+        .requiredSkill("python")
+        .build();
+    var results = Collections.singletonList(item);
+
+    when(jobPostingService.getJobPostings(any()))
+        .thenReturn(new PageImpl<>(results));
+
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders
+                .get("/api/v1/job-posting")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+        .andDo(
+            restDocs.document(
+                pathParameters(
+                    requestPageable()
+                ),
+                responseFields(
+                    responseCommon()
+                )
+                    .and(responsePage())
+                    .andWithPrefix("data.content[].",
+                        fieldWithPath("id")
+                            .type(JsonFieldType.NUMBER)
+                            .description("채용 공고 ID"),
+                        fieldWithPath("recruitPosition")
+                            .type(JsonFieldType.STRING)
+                            .description("채용 포지션"),
+                        fieldWithPath("recruitReward")
+                            .type(JsonFieldType.NUMBER)
+                            .description("채용 보상"),
+                        fieldWithPath("description")
+                            .type(JsonFieldType.STRING)
+                            .description("채용 공고 설명"),
+                        fieldWithPath("requiredSkill")
+                            .type(JsonFieldType.STRING)
+                            .description("사용 기술")
+                    )
+            ));
   }
 
 
