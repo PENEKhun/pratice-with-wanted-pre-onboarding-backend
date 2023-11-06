@@ -7,7 +7,8 @@ public record JobPostingCreateRes(
     Long id,
     int recruitReward,
     String recruitPosition,
-    String description
+    String description,
+    String requiredSkill
 ) {
 
 }

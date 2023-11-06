@@ -21,7 +21,7 @@ public class JobPosting {
   @Id
   @Column(name = "idx")
   private Long id;
-  
+
   @OneToOne
   @JoinColumn(name = "company_id")
   private EnterpriseUserAccount company;
@@ -35,11 +35,16 @@ public class JobPosting {
   @Column(name = "description")
   private String description;
 
+  @Column(name = "required_skill")
+  private String requiredSkill;
+
   @Builder
-  public JobPosting(int recruitReward, String recruitPosition, String description) {
+  public JobPosting(int recruitReward, String recruitPosition, String description,
+      String requiredSkill) {
     this.recruitReward = recruitReward;
     this.recruitPosition = recruitPosition;
     this.description = description;
+    this.requiredSkill = requiredSkill;
   }
 
   public JobPosting() {

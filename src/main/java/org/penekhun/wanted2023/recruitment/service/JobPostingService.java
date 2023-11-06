@@ -37,6 +37,7 @@ public class JobPostingService {
         .description(jobPostingReq.description())
         .recruitPosition(jobPostingReq.recruitPosition())
         .recruitReward(jobPostingReq.recruitReward())
+        .requiredSkill(jobPostingReq.requiredSkill())
         .build();
     jobPosting.setCompany(enterpriseUser);
     jobPostingRepository.save(jobPosting);
@@ -46,6 +47,7 @@ public class JobPostingService {
         .recruitReward(jobPosting.getRecruitReward())
         .recruitPosition(jobPosting.getRecruitPosition())
         .description(jobPosting.getDescription())
+        .requiredSkill(jobPosting.getRequiredSkill())
         .build();
   }
 

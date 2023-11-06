@@ -18,7 +18,10 @@ public record JobPostingCreateReq(
     String recruitPosition,
     @NotBlank(message = "채용 설명을 입력해주세요.")
     @Size(max = 10000, message = "채용 설명은 10000자 이하로 입력해주세요.")
-    String description
+    String description,
+    @NotBlank(message = "요구 스킬을 입력해주세요.")
+    @Size(max = 20, message = "요구 스킬은 20자 이하로 입력해주세요.")
+    String requiredSkill
 ) {
 
 }
