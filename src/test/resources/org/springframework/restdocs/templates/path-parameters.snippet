@@ -1,0 +1,18 @@
+=== Request Parameters
+|===
+|Parameter|Description|Optional(Default)
+
+{{#parameters}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+|{{#tableCellContent}}
+  {{#optional}}
+    O
+    {{#defaultValue}}
+      (기본값: {{defaultValue}})
+    {{/defaultValue}}
+  {{/optional}}
+{{/tableCellContent}}
+
+{{/parameters}}
+|===
