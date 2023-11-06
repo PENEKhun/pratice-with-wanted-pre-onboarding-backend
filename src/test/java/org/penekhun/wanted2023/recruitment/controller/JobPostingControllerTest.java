@@ -71,7 +71,6 @@ class JobPostingControllerTest extends RestDocsSupport {
                     .type(JsonFieldType.STRING)
                     .description("채용 포지션"),
                 fieldWithPath("recruitReward")
-                    .optional()
                     .type(JsonFieldType.NUMBER)
                     .description("채용 보상"),
                 fieldWithPath("description")
