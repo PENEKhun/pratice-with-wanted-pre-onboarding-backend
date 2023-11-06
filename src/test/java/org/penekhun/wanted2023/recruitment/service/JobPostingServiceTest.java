@@ -40,9 +40,59 @@ class JobPostingServiceTest {
   @Autowired
   EnterpriseAccountRepository enterpriseAccountRepository;
 
-  @BeforeEach
-  void setUp() {
-    enterpriseAccountRepository.save(enterpriseAccount);
+  @Nested
+  @DisplayName("getJobPostings 메서드는")
+  class getJobPostings {
+
+    EnterpriseUserAccount enterpriseAccount = CreateEnterpriseUserAccount();
+    ArrayList<JobPosting> jobPostings = new ArrayList<>();
+
+    @BeforeEach
+    void setUp() {
+      // clear
+      jobPostingRepository.deleteAllInBatch();
+
+      // 본격적인 사전 데이터 준비
+      enterpriseAccount = CreateEnterpriseUserAccount();
+      enterpriseAccountRepository.save(enterpriseAccount);
+
+      for (int i = 0; i < 50; i++) {
+        jobPostings.add(CreateJobPosting());
+      }
+      jobPostings.forEach(jobPosting -> jobPosting.setCompany(enterpriseAccount));
+      jobPostingRepository.saveAll(jobPostings);
+    }
+
+    @AfterEach
+    void tearDown() {
+      jobPostingRepository.deleteAll(jobPostings);
+      enterpriseAccountRepository.delete(enterpriseAccount);
+    }
+
+    @RepeatedTest(5)
+    @DisplayName("모든 인자가 정상일때 정상적으로 채용 공고를 조회합니다.")
+    void happyCase() {
+      // given
+      int page = 0;
+      int size = jobPostings.size();
+      Pageable pageable = PageRequest.of(page, size);
+
+      // when
+      Page<JobPostingSearchRes> response = jobPostingService.getJobPostings(pageable);
+
+      // then
+      assertThat(response)
+          .as("content", "totalElements", "totalPages", "number", "size", "numberOfElements")
+          .hasNoNullFieldsOrProperties()
+          .extracting(
+              "content",
+              "numberOfElements"
+          ).containsExactly(
+              jobPostings.stream().map(JobPostingSearchRes::from).toList(),
+              jobPostings.size()
+          );
+    }
+
   }
 
   @Nested
