@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.penekhun.wanted2023.global.rest_controller.ApiResponse;
 import org.penekhun.wanted2023.global.security.CurrentUser;
+import org.penekhun.wanted2023.global.security.dto.SecurityRole.ROLES;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
@@ -33,7 +34,7 @@ public class JobPostingController {
     return ApiResponse.ok(jobPostingService.getJobPostings());
   }
 
-  @Secured("ROLE_ENTERPRISE")
+  @Secured(ROLES.ENTERPRISE)
   @PostMapping("/job-posting")
   public ApiResponse<JobPostingCreateRes> createJobPosting(
       @CurrentUser EnterpriseUserAccount enterpriseUser,
@@ -41,7 +42,7 @@ public class JobPostingController {
     return ApiResponse.ok(jobPostingService.createJobPosting(enterpriseUser, jobPostingReq));
   }
 
-  @Secured("ROLE_ENTERPRISE")
+  @Secured(ROLES.ENTERPRISE)
   @ResponseStatus(NO_CONTENT)
   @DeleteMapping("/job-posting/{jobPostId}")
   public void deleteMyJobPosting(
