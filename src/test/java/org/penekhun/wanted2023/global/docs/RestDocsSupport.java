@@ -60,31 +60,59 @@ public abstract class RestDocsSupport {
 
   protected ParameterDescriptor[] requestPageable() {
     return new ParameterDescriptor[]{
-        parameterWithName("page").description("페이지 번호").optional(),
-        parameterWithName("size").description("한 페이지당 항목 수").optional(),
-        parameterWithName("sort").description("정렬 기준 (예: 필드명,desc 또는 id,asc)").optional()
+        parameterWithName("page")
+            .description("페이지 번호")
+            .optional(),
+        parameterWithName("size")
+            .description("한 페이지당 항목 수")
+            .attributes(new Attribute("defaultValue", "10"))
+            .optional(),
+        parameterWithName("sort")
+            .description("정렬 기준 (예: 필드명,desc 또는 id,asc)")
+            .attributes(new Attribute("defaultValue", "id,desc"))
+            .optional()
     };
   }
 
 
   protected FieldDescriptor[] responsePage() {
     return new FieldDescriptor[]{
-        fieldWithPath("data.pageable").type(JsonFieldType.STRING).description(
-            "페이징 정보 (예: INSTANCE)"),
-        fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER).description(
-            "데이터 집합의 총 요소 수"),
-        fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
-        fieldWithPath("data.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
-        fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("한 페이지당 아이템 수"),
-        fieldWithPath("data.number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
-        fieldWithPath("data.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬이 비어있는지 여부"),
-        fieldWithPath("data.sort.sorted").type(JsonFieldType.BOOLEAN).description("결과가 정렬되었는지 여부"),
-        fieldWithPath("data.sort.unsorted").type(JsonFieldType.BOOLEAN).description(
-            "결과가 정렬되지 않았는지 여부"),
-        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description(
-            "현재 페이지의 요소 수"),
-        fieldWithPath("data.first").type(JsonFieldType.BOOLEAN).description("첫 번째 페이지 여부"),
-        fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어있는지 여부")
+        fieldWithPath("data.pageable")
+            .type(JsonFieldType.STRING)
+            .description("페이징 정보 (예: INSTANCE)"),
+        fieldWithPath("data.totalElements")
+            .type(JsonFieldType.NUMBER)
+            .description("데이터 집합의 총 요소 수"),
+        fieldWithPath("data.totalPages")
+            .type(JsonFieldType.NUMBER)
+            .description("총 페이지 수"),
+        fieldWithPath("data.last")
+            .type(JsonFieldType.BOOLEAN)
+            .description("마지막 페이지 여부"),
+        fieldWithPath("data.size")
+            .type(JsonFieldType.NUMBER)
+            .description("한 페이지당 아이템 수"),
+        fieldWithPath("data.number")
+            .type(JsonFieldType.NUMBER)
+            .description("현재 페이지 번호"),
+        fieldWithPath("data.sort.empty")
+            .type(JsonFieldType.BOOLEAN)
+            .description("정렬이 비어있는지 여부"),
+        fieldWithPath("data.sort.sorted")
+            .type(JsonFieldType.BOOLEAN)
+            .description("결과가 정렬되었는지 여부"),
+        fieldWithPath("data.sort.unsorted")
+            .type(JsonFieldType.BOOLEAN)
+            .description("결과가 정렬되지 않았는지 여부"),
+        fieldWithPath("data.numberOfElements")
+            .type(JsonFieldType.NUMBER)
+            .description("현재 페이지의 요소 수"),
+        fieldWithPath("data.first")
+            .type(JsonFieldType.BOOLEAN)
+            .description("첫 번째 페이지 여부"),
+        fieldWithPath("data.empty")
+            .type(JsonFieldType.BOOLEAN)
+            .description("페이지가 비어있는지 여부")
     };
   }
 }
