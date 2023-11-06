@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
@@ -62,7 +63,7 @@ public class JobPosting {
 
     JobPosting that = (JobPosting) o;
 
-    return id == that.id;
+    return Objects.equals(id, that.id);
   }
 
   @Override
