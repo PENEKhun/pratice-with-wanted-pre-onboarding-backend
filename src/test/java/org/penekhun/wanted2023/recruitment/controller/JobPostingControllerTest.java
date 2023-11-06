@@ -41,7 +41,8 @@ class JobPostingControllerTest extends RestDocsSupport {
     var input = new JobPostingCreateReq(
         1000000,
         "개발자",
-        "개발자를 채용합니다."
+        "개발자를 채용합니다.",
+        "python"
     );
 
     given(jobPostingService.createJobPosting(any(), any()))
@@ -50,6 +51,7 @@ class JobPostingControllerTest extends RestDocsSupport {
             .recruitPosition(input.recruitPosition())
             .recruitReward(input.recruitReward())
             .description(input.description())
+            .requiredSkill(input.requiredSkill())
             .build());
 
     mockMvc
@@ -70,7 +72,10 @@ class JobPostingControllerTest extends RestDocsSupport {
                     .description("채용 보상"),
                 fieldWithPath("description")
                     .type(JsonFieldType.STRING)
-                    .description("채용 공고 설명")
+                    .description("채용 공고 설명"),
+                fieldWithPath("requiredSkill")
+                    .type(JsonFieldType.STRING)
+                    .description("사용 기술")
             ),
             responseFields(responseCommon())
                 .andWithPrefix("data.",
@@ -85,7 +90,10 @@ class JobPostingControllerTest extends RestDocsSupport {
                         .description("채용 보상"),
                     fieldWithPath("description")
                         .type(JsonFieldType.STRING)
-                        .description("채용 공고 설명")
+                        .description("채용 공고 설명"),
+                    fieldWithPath("requiredSkill")
+                        .type(JsonFieldType.STRING)
+                        .description("사용 기술")
                 )
         ))
         .andReturn();
