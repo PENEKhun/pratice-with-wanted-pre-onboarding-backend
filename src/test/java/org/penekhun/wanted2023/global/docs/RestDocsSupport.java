@@ -2,6 +2,7 @@ package org.penekhun.wanted2023.global.docs;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -62,14 +63,15 @@ public abstract class RestDocsSupport {
     return new ParameterDescriptor[]{
         parameterWithName("page")
             .description("페이지 번호")
+            .attributes(key("defaultValue").value(0))
             .optional(),
         parameterWithName("size")
             .description("한 페이지당 항목 수")
-            .attributes(new Attribute("defaultValue", "10"))
+            .attributes(key("defaultValue").value(10))
             .optional(),
         parameterWithName("sort")
             .description("정렬 기준 (예: 필드명,desc 또는 id,asc)")
-            .attributes(new Attribute("defaultValue", "id,desc"))
+            .attributes(key("defaultValue").value("id,desc"))
             .optional()
     };
   }
