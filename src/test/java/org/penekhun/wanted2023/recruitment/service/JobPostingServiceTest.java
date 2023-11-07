@@ -1,11 +1,13 @@
 package org.penekhun.wanted2023.recruitment.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.penekhun.wanted2023.recruitment.fixture.RecruitmentFixture.CreateJobPosting;
 import static org.penekhun.wanted2023.recruitment.fixture.RecruitmentFixture.CreateJobPostingReq;
 import static org.penekhun.wanted2023.user.UserFixture.CreateEnterpriseUserAccount;
 
+import jakarta.validation.ValidationException;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,7 +121,7 @@ class JobPostingServiceTest {
     @DisplayName("모든 인자가 정상일때 정상적으로 채용 공고를 생성합니다.")
     void happyCase() {
       // given
-      JobPostingCreateReq arg = CreateJobPostingReq();
+      JobPostingCreateReq arg = CreateJobPostingReq().sample();
 
       // when
       JobPostingCreateRes response = jobPostingService.createJobPosting(enterpriseAccount, arg);
@@ -138,6 +140,86 @@ class JobPostingServiceTest {
               arg.description()
           );
     }
+
+    @Test
+    @DisplayName("채용 보상금이 많이 클 때 예외를 발생시킵니다.")
+    void recruitReward_big_fail() {
+      // given
+      JobPostingCreateReq arg = CreateJobPostingReq()
+          .set("recruitReward", 100000001)
+          .validOnly(false)
+          .sample();
+
+      // when & then
+      assertThrows(
+          ValidationException.class,
+          () -> jobPostingService.createJobPosting(enterpriseAccount, arg)
+      );
+    }
+
+    @Test
+    @DisplayName("채용 보상금이 음수일때 예외를 발생시킵니다.")
+    void recruitReward_negative_fail() {
+      // given
+      JobPostingCreateReq arg = CreateJobPostingReq()
+          .set("recruitReward", -1)
+          .validOnly(false)
+          .sample();
+
+      // when & then
+      assertThrows(
+          ValidationException.class,
+          () -> jobPostingService.createJobPosting(enterpriseAccount, arg)
+      );
+    }
+
+    @Test
+    @DisplayName("채용 포지션이 길때 예외를 발생시킵니다.")
+    void recruitPosition_long_fail() {
+      // given
+      JobPostingCreateReq arg = CreateJobPostingReq()
+          .set("recruitPosition", "a".repeat(31))
+          .validOnly(false)
+          .sample();
+
+      // when & then
+      assertThrows(
+          ValidationException.class,
+          () -> jobPostingService.createJobPosting(enterpriseAccount, arg)
+      );
+    }
+
+    @Test
+    @DisplayName("채용 설명이 길때 예외를 발생시킵니다.")
+    void description_long_fail() {
+      // given
+      JobPostingCreateReq arg = CreateJobPostingReq()
+          .set("description", "a".repeat(10001))
+          .validOnly(false)
+          .sample();
+
+      // when & then
+      assertThrows(
+          ValidationException.class,
+          () -> jobPostingService.createJobPosting(enterpriseAccount, arg)
+      );
+    }
+
+    @Test
+    @DisplayName("요구 스킬이 길때 예외를 발생시킵니다.")
+    void requiredSkill_long_fail() {
+      // given
+      JobPostingCreateReq arg = CreateJobPostingReq()
+          .set("requiredSkill", "a".repeat(21))
+          .validOnly(false)
+          .sample();
+
+      // when & then
+      assertThrows(
+          ValidationException.class,
+          () -> jobPostingService.createJobPosting(enterpriseAccount, arg)
+      );
+    }
   }
 
   @Nested
@@ -151,7 +233,7 @@ class JobPostingServiceTest {
       EnterpriseUserAccount me = CreateEnterpriseUserAccount();
       enterpriseAccountRepository.save(me);
       JobPostingCreateRes jobPosting = jobPostingService.createJobPosting(me,
-          CreateJobPostingReq());
+          CreateJobPostingReq().sample());
 
       // when
       jobPostingService.deleteMyJobPosting(me, jobPosting.id());
@@ -171,7 +253,7 @@ class JobPostingServiceTest {
       enterpriseAccountRepository.save(me);
       enterpriseAccountRepository.save(notMe);
       JobPostingCreateRes jobPosting = jobPostingService.createJobPosting(me,
-          CreateJobPostingReq());
+          CreateJobPostingReq().sample());
 
       // when & then
       assertThrowsExactly(

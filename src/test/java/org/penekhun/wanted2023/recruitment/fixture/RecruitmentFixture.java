@@ -1,5 +1,6 @@
 package org.penekhun.wanted2023.recruitment.fixture;
 
+import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
@@ -26,14 +27,14 @@ public class RecruitmentFixture {
         .build().sample();
   }
 
-  public static JobPostingCreateReq CreateJobPostingReq() {
+  public static ArbitraryBuilder<JobPostingCreateReq> CreateJobPostingReq() {
 
     FixtureMonkey fixture = FixtureMonkey.builder()
         .objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
         .plugin(new JakartaValidationPlugin())
         .build();
 
-    return fixture.giveMeOne(JobPostingCreateReq.class);
+    return fixture.giveMeBuilder(JobPostingCreateReq.class);
   }
 
 }
