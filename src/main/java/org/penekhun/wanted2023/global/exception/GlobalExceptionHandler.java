@@ -17,11 +17,7 @@ public class GlobalExceptionHandler {
     ExceptionCode err = e.getExceptionCode();
     return ResponseEntity
         .status(err.getHttpStatus())
-        .body(
-            new ApiResponse<>(
-                err.getHttpStatus(),
-                err.getMessage(),
-                null)
+        .body(new ApiResponse<>(err)
         );
   }
 
