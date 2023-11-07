@@ -2,9 +2,15 @@ package org.penekhun.wanted2023.global.security.filter;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.penekhun.wanted2023.global.security.filter.JwtTokenChkFilter.AUTHORIZATION_HEADER;
+import static org.penekhun.wanted2023.global.security.filter.JwtTokenChkFilter.TOKEN_PREFIX;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -82,8 +88,17 @@ class JwtTokenGenFilterTest {
                 }
                 """))
         .andDo(
-            document(
-                "auth/login",
+            document("auth/login",
+                preprocessRequest(
+                    modifyHeaders().remove("Content-Length"),
+                    modifyHeaders().remove("Host"),
+                    prettyPrint()
+                ),
+                preprocessResponse(
+                    modifyHeaders().removeMatching("^(?!%s$).*".formatted(AUTHORIZATION_HEADER)),
+                    modifyHeaders().set(AUTHORIZATION_HEADER, TOKEN_PREFIX + "{{ACCESS_TOKEN}}"),
+                    prettyPrint()
+                ),
                 requestFields(
                     fieldWithPath("username")
                         .type(JsonFieldType.STRING)
