@@ -1,6 +1,7 @@
 package org.penekhun.wanted2023.recruitment.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.penekhun.wanted2023.recruitment.fixture.RecruitmentFixture.CreateJobPosting;
 import static org.penekhun.wanted2023.recruitment.fixture.RecruitmentFixture.CreateJobPostingReq;
 import static org.penekhun.wanted2023.user.UserFixture.CreateEnterpriseUserAccount;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.penekhun.wanted2023.global.exception.CustomException;
+import org.penekhun.wanted2023.global.exception.ExceptionCode;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
@@ -157,6 +160,25 @@ class JobPostingServiceTest {
       assertThat(jobPostingRepository.findById(jobPosting.id()))
           .as("삭제 후 조회 결과가 없어야 합니다.")
           .isEmpty();
+    }
+
+    @Test
+    @DisplayName("본인의 채용공고가 아닐때 예외를 발생시킵니다.")
+    void cant_remove_jobPosting_NotMine() {
+      // given
+      EnterpriseUserAccount me = CreateEnterpriseUserAccount();
+      EnterpriseUserAccount notMe = CreateEnterpriseUserAccount();
+      enterpriseAccountRepository.save(me);
+      enterpriseAccountRepository.save(notMe);
+      JobPostingCreateRes jobPosting = jobPostingService.createJobPosting(me,
+          CreateJobPostingReq());
+
+      // when & then
+      assertThrowsExactly(
+          CustomException.class,
+          () -> jobPostingService.deleteMyJobPosting(notMe, jobPosting.id()),
+          ExceptionCode.INVALID_REQUEST.getMessage()
+      );
     }
 
   }
