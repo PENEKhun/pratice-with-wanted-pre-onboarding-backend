@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
@@ -134,6 +135,30 @@ class JobPostingServiceTest {
               arg.description()
           );
     }
+  }
+
+  @Nested
+  @DisplayName("deleteMyJobPostings 메서드는")
+  class deleteMyJobPosting {
+
+    @Test
+    @DisplayName("본인의 채용공고를 정상적으로 삭제합니다.")
+    void happyCase() {
+      // given
+      EnterpriseUserAccount me = CreateEnterpriseUserAccount();
+      enterpriseAccountRepository.save(me);
+      JobPostingCreateRes jobPosting = jobPostingService.createJobPosting(me,
+          CreateJobPostingReq());
+
+      // when
+      jobPostingService.deleteMyJobPosting(me, jobPosting.id());
+
+      // then
+      assertThat(jobPostingRepository.findById(jobPosting.id()))
+          .as("삭제 후 조회 결과가 없어야 합니다.")
+          .isEmpty();
+    }
+
   }
 
 }
