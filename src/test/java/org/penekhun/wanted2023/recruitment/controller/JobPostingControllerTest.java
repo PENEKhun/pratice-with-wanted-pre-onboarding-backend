@@ -58,7 +58,7 @@ class JobPostingControllerTest extends RestDocsSupport {
     mockMvc
         .perform(
             post("/api/v1/job-posting")
-                .with(csrf())
+                .header("Authorization", "Bearer {{ACCESS_TOKEN}}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input)))
         .andExpect(status().isOk())
@@ -125,7 +125,6 @@ class JobPostingControllerTest extends RestDocsSupport {
         .perform(
             RestDocumentationRequestBuilders
                 .get("/api/v1/job-posting")
-                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(
             restDocs.document(
@@ -179,7 +178,7 @@ class JobPostingControllerTest extends RestDocsSupport {
         .perform(
             RestDocumentationRequestBuilders
                 .delete("/api/v1/job-posting/{jobPostId}", 1L)
-                .with(csrf())
+                .header("Authorization", "Bearer {{ACCESS_TOKEN}}")
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(
             restDocs.document(
