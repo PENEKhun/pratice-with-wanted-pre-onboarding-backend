@@ -21,7 +21,6 @@ import org.penekhun.wanted2023.recruitment.dto.response.JobPostingCreateRes;
 import org.penekhun.wanted2023.recruitment.dto.response.JobPostingSearchRes;
 import org.penekhun.wanted2023.recruitment.service.JobPostingService;
 import org.penekhun.wanted2023.user.dto.EnterpriseUserRes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
@@ -29,15 +28,12 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-@WebMvcTest(controllers = JobPostingController.class)
+@WebMvcTest(JobPostingController.class)
 @DisplayName("채용공고 컨트롤러 테스트")
 class JobPostingControllerTest extends RestDocsSupport {
 
   @MockBean
   JobPostingService jobPostingService;
-
-  @Autowired
-  JobPostingController jobPostingController;
 
   @Test
   @DisplayName("채용 공고 생성에 성공한다.")
