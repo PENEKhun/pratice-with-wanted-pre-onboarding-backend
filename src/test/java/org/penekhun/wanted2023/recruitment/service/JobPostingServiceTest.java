@@ -223,6 +223,94 @@ class JobPostingServiceTest {
   }
 
   @Nested
+  @DisplayName("updateMyJobPosting 메서드는")
+  class updateMyJobPosting {
+
+    @Test
+    @DisplayName("삭제할 채용공고 ID가 null이라면 예외를 발생시킵니다.")
+    void jobPostId_null_fail() {
+      // given
+      Long jobPostId = null;
+      JobPostingCreateReq arg = CreateJobPostingReq().sample();
+      EnterpriseUserAccount me = CreateEnterpriseUserAccount();
+      enterpriseAccountRepository.save(me);
+
+      // when & then
+      assertThrowsExactly(
+          CustomException.class,
+          () -> jobPostingService.updateMyJobPosting(me, jobPostId, arg),
+          ExceptionCode.INVALID_REQUEST.getMessage()
+      );
+    }
+
+    @Test
+    @DisplayName("수정할때 JobPosting의 UpdatePartly 메서드가 정상적으로 호출됩니다.")
+    void updatePartly_called() {
+      // given
+      EnterpriseUserAccount me = CreateEnterpriseUserAccount();
+      enterpriseAccountRepository.save(me);
+      JobPostingCreateRes jobPosting = jobPostingService.createJobPosting(
+          me,
+          new JobPostingCreateReq(
+              100,
+              "수정전 포지션",
+              "수정전 설명",
+              "수정전 요구 스킬"
+          )
+      );
+
+      JobPostingCreateReq arg = new JobPostingCreateReq(
+          200,
+          "수정후 포지션",
+          "수정후 설명",
+          "수정후 요구 스킬"
+      );
+
+      // when
+      jobPostingService.updateMyJobPosting(me, jobPosting.id(), arg);
+
+      // then
+      assertThat(jobPostingRepository.findById(jobPosting.id()))
+          .as("수정된 채용공고가 정상적으로 저장되어 있어야 합니다.")
+          .isPresent()
+          .get()
+          .extracting(
+              "recruitReward",
+              "recruitPosition",
+              "description",
+              "requiredSkill"
+          ).containsExactly(
+              arg.recruitReward(),
+              arg.recruitPosition(),
+              arg.description(),
+              arg.requiredSkill()
+          );
+    }
+
+
+    @Test
+    @DisplayName("본인의 채용공고가 아니라면 예외를 발생시킵니다.")
+    void only_for_my_jobPosting() {
+      // given
+      EnterpriseUserAccount me = CreateEnterpriseUserAccount();
+      EnterpriseUserAccount notMe = CreateEnterpriseUserAccount();
+      enterpriseAccountRepository.save(me);
+      enterpriseAccountRepository.save(notMe);
+
+      JobPostingCreateReq arg = CreateJobPostingReq().sample();
+      JobPostingCreateRes jobPosting = jobPostingService.createJobPosting(me, arg);
+
+      // when & then
+      assertThrowsExactly(
+          CustomException.class,
+          () -> jobPostingService.updateMyJobPosting(notMe, jobPosting.id(), arg),
+          ExceptionCode.INVALID_REQUEST.getMessage()
+      );
+    }
+
+  }
+
+  @Nested
   @DisplayName("deleteMyJobPostings 메서드는")
   class deleteMyJobPosting {
 
