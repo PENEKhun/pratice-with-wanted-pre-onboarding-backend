@@ -8,10 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
+import org.springframework.util.StringUtils;
 
 @Getter
 @Entity
@@ -78,5 +81,20 @@ public class JobPosting {
 
   public void setCompany(EnterpriseUserAccount company) {
     this.company = company;
+  }
+
+  public void updatePartly(@NotNull JobPostingCreateReq jobPostingReq) {
+    if (StringUtils.hasText(jobPostingReq.description())) {
+      this.recruitReward = jobPostingReq.recruitReward();
+    }
+    if (StringUtils.hasText(jobPostingReq.recruitPosition())) {
+      this.recruitPosition = jobPostingReq.recruitPosition();
+    }
+    if (StringUtils.hasText(jobPostingReq.description())) {
+      this.description = jobPostingReq.description();
+    }
+    if (StringUtils.hasText(jobPostingReq.requiredSkill())) {
+      this.requiredSkill = jobPostingReq.requiredSkill();
+    }
   }
 }
