@@ -81,4 +81,25 @@ public class JobPostingService {
         result.getTotalElements()
     );
   }
+
+  @Transactional
+  public JobPostingCreateRes updateMyJobPosting(EnterpriseUserAccount enterpriseUser,
+      Long jobPostId, @Valid JobPostingCreateReq jobPostingReq) {
+    if (jobPostId == null || enterpriseUser == null) {
+      throw new CustomException(ExceptionCode.INVALID_REQUEST);
+    }
+
+    JobPosting jobPosting = jobPostingRepository.findById(jobPostId)
+        .filter(myJobPost(enterpriseUser))
+        .orElseThrow(() -> new CustomException(ExceptionCode.INVALID_REQUEST));
+
+    jobPosting.updatePartly(jobPostingReq);
+    return JobPostingCreateRes.builder()
+        .id(jobPosting.getId())
+        .recruitReward(jobPosting.getRecruitReward())
+        .recruitPosition(jobPosting.getRecruitPosition())
+        .description(jobPosting.getDescription())
+        .requiredSkill(jobPosting.getRequiredSkill())
+        .build();
+  }
 }

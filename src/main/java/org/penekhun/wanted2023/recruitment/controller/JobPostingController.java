@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,17 @@ public class JobPostingController {
       @Valid @RequestBody JobPostingCreateReq jobPostingReq) {
     return ApiResponse.ok(jobPostingService.createJobPosting(enterpriseUser, jobPostingReq));
   }
+
+  @Secured(ROLES.ENTERPRISE)
+  @PatchMapping("/job-posting/{jobPostId}")
+  public ApiResponse<JobPostingCreateRes> updateMyJobPosting(
+      @CurrentUser EnterpriseUserAccount enterpriseUser,
+      @NotNull @PathVariable Long jobPostId,
+      @Valid @RequestBody JobPostingCreateReq jobPostingReq) {
+    return ApiResponse.ok(
+        jobPostingService.updateMyJobPosting(enterpriseUser, jobPostId, jobPostingReq));
+  }
+
 
   @Secured(ROLES.ENTERPRISE)
   @ResponseStatus(NO_CONTENT)
