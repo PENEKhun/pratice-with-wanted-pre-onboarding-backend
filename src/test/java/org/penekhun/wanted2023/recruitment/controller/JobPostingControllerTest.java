@@ -99,6 +99,79 @@ class JobPostingControllerTest extends RestDocsSupport {
   }
 
   @Test
+  @DisplayName("채용 공고 수정에 성공한다.")
+  void update_job_posting() throws Exception {
+
+    var input = new JobPostingCreateReq(
+        1000000,
+        "개발자",
+        "개발자를 채용합니다.",
+        "python"
+    );
+
+    given(jobPostingService.updateMyJobPosting(any(), any(), any()))
+        .willReturn(JobPostingCreateRes.builder()
+            .id(1L)
+            .recruitPosition(input.recruitPosition())
+            .recruitReward(input.recruitReward())
+            .description(input.description())
+            .requiredSkill(input.requiredSkill())
+            .build());
+
+    mockMvc
+        .perform(
+            RestDocumentationRequestBuilders
+                .patch("/api/v1/job-posting/{jobPostId}", 1L)
+                .header("Authorization", "Bearer {{ACCESS_TOKEN}}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input)))
+        .andExpect(status().isOk())
+        .andDo(restDocs.document(
+            pathParameters(
+                parameterWithName("jobPostId")
+                    .description("수정하려는 채용 공고 id"))
+            ,
+            requestFields(
+                fieldWithPath("recruitPosition")
+                    .type(JsonFieldType.STRING)
+                    .description("채용 포지션")
+                    .optional(),
+                fieldWithPath("recruitReward")
+                    .type(JsonFieldType.NUMBER)
+                    .description("채용 보상")
+                    .optional(),
+                fieldWithPath("description")
+                    .type(JsonFieldType.STRING)
+                    .description("채용 공고 설명")
+                    .optional(),
+                fieldWithPath("requiredSkill")
+                    .type(JsonFieldType.STRING)
+                    .description("사용 기술")
+                    .optional()
+            ),
+            responseFields(responseCommon())
+                .andWithPrefix("data.",
+                    fieldWithPath("id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("채용 공고 ID"),
+                    fieldWithPath("recruitPosition")
+                        .type(JsonFieldType.STRING)
+                        .description("채용 포지션"),
+                    fieldWithPath("recruitReward")
+                        .type(JsonFieldType.NUMBER)
+                        .description("채용 보상"),
+                    fieldWithPath("description")
+                        .type(JsonFieldType.STRING)
+                        .description("채용 공고 설명"),
+                    fieldWithPath("requiredSkill")
+                        .type(JsonFieldType.STRING)
+                        .description("사용 기술")
+                )
+        ))
+        .andReturn();
+  }
+
+  @Test
   @DisplayName("채용 공고 조회에 성공한다.")
   void search_job_posting_withPage() throws Exception {
     var item = JobPostingSearchRes.builder()
