@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,6 +25,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity(name = "user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
+@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE idx = ?")
+@Where(clause = "deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 public abstract class UserAccount {
 
@@ -48,6 +52,9 @@ public abstract class UserAccount {
   @LastModifiedDate
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  @Column(name = "deleted_at")
+  private LocalDateTime deletedAt;
 
   protected UserAccount(String username, String password, boolean isBan) {
     this.username = username;
