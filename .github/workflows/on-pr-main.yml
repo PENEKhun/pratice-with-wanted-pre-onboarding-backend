@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+permissions:
+  pull-requests: write
+  checks: write
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,3 +39,5 @@ jobs:
         if: ${{ always() }} # 테스트가 실패하여도 수행
         with:
           files: build/test-results/**/*.xml
+
+
