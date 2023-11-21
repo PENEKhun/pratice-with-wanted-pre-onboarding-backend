@@ -21,15 +21,20 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3306
-          mysql database: 'wanted2023'
-          mysql root password: 'test1234'
+      #      - uses: mirromutth/mysql-action@v1.1
+      #        with:
+      #          host port: 3306
+      #          container port: 3306
+      #          mysql database: 'wanted2023'
+      #          mysql root password: 'test1234'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Set TEST_DB host/pw from Git env
+        run: |
+          echo "TEST_DB_URL=${{ secrets.TEST_DB_URL }}" >> $GITHUB_ENV
+          echo "TEST_DB_PASSWORD=${{ secrets.TEST_DB_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: SPRING_PROFILES_ACTIVE=test ./gradlew clean build
