@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: test
+  sql:
+    init:
+      mode: always
+      schema-locations:
+        - classpath:schema.sql
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: "jdbc:mysql://localhost:3307/wanted2023"
+      username: "root"
+      password: "testtest1234"
+  jpa:
+    database: mysql
+    hibernate:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      ddl-auto: none
+      format_sql: true
+      use_sql_comment: true
+    show-sql: true
