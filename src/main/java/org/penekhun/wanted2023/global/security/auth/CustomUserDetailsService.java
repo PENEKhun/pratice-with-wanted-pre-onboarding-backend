@@ -26,21 +26,23 @@ public class CustomUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     log.info("called loadUserByUsername. username: {}", username);
 
-    Optional<EnterpriseUserAccount> foundEnterpriseUser = enterpriseAccountRepository.findByUsername(
-        username);
+    UserAccount userAccount = findUserByUsername(username);
+
+    return new CustomUser(userAccount, userAccount instanceof PersonalUserAccount);
+  }
+
+  private UserAccount findUserByUsername(String username) {
     Optional<PersonalUserAccount> foundPersonalUser = personalAccountRepository.findByUsername(
         username);
+    Optional<EnterpriseUserAccount> foundEnterpriseUser = enterpriseAccountRepository.findByUsername(
+        username);
 
-    UserAccount userAccount = null;
     if (foundPersonalUser.isPresent()) {
-      userAccount = foundPersonalUser.get();
-
+      return foundPersonalUser.get();
     } else if (foundEnterpriseUser.isPresent()) {
-      userAccount = foundEnterpriseUser.get();
+      return foundEnterpriseUser.get();
     } else {
-      throw new EntityNotFoundException("존재하지 않는 회원입니다.");
+      throw new EntityNotFoundException("User not found");
     }
-
-    return new CustomUser(userAccount, foundPersonalUser.isPresent());
   }
 }
