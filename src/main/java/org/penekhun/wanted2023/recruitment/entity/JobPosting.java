@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +26,8 @@ import org.springframework.util.StringUtils;
 @Getter
 @Entity
 @Table(name = "job_posting", schema = "wanted2023")
+@SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE idx = ?")
+@Where(clause = "deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 public class JobPosting {
 
@@ -55,6 +59,9 @@ public class JobPosting {
   @LastModifiedDate
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  @Column(name = "deleted_at")
+  private LocalDateTime deletedAt;
 
   @Builder
   public JobPosting(int recruitReward, String recruitPosition, String description,
