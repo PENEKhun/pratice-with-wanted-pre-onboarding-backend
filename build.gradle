@@ -38,8 +38,8 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     // 롬북
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     // 유효성 검사
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
@@ -52,14 +52,12 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
     testImplementation 'org.springframework.security:spring-security-test:6.0.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
-    // h2
-    testImplementation 'com.h2database:h2:1.4.200'
     // Fixture Monkey
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.11")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jakarta-validation:0.6.8")
     // REST Docs
-    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.6.RELEASE'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.6.RELEASE'
 }
 
 tasks.named('test') {
