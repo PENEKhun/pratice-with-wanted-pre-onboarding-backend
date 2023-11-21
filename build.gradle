@@ -52,6 +52,8 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
     testImplementation 'org.springframework.security:spring-security-test:6.0.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
+    // h2
+    testImplementation 'com.h2database:h2:1.4.200'
     // Fixture Monkey
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.11")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jakarta-validation:0.6.8")

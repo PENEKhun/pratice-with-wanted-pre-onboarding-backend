@@ -4,16 +4,19 @@ spring:
       mode: always
       schema-locations:
         - classpath:schema.sql
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: "jdbc:mysql://127.0.0.1/wanted2023"
+  #    username: "root"
+  #    password: "test1234"
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://127.0.0.1/wanted2023"
-    username: "root"
-    password: "test1234"
+    url: jdbc:h2:mem:wanted2023;MODE=MySQL
+    username: sa
   jpa:
     database: mysql
     hibernate:
       driverClassName: com.mysql.cj.jdbc.Driver
-      ddl-auto: none
+      ddl-auto: create
       format_sql: true
       use_sql_comment: true
     show-sql: true
