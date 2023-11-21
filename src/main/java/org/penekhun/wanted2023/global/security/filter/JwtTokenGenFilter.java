@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.penekhun.wanted2023.global.security.auth.CustomUser;
 import org.penekhun.wanted2023.global.security.provider.JwtTokenProvider;
@@ -34,21 +35,23 @@ public class JwtTokenGenFilter extends UsernamePasswordAuthenticationFilter {
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response)
       throws AuthenticationException {
-    ObjectMapper om = new ObjectMapper();
-    UserLogin userLogin = null;
-
-    try {
-      userLogin = om.readValue(request.getInputStream(), UserLogin.class);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
+    UserLogin userLogin = readUserLoginFromRequest(request);
     return getAuthenticationManager().authenticate(
         new UsernamePasswordAuthenticationToken(
             userLogin.username,
             userLogin.password,
             null
         ));
+  }
+
+  private UserLogin readUserLoginFromRequest(HttpServletRequest request) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      return objectMapper.readValue(request.getInputStream(), UserLogin.class);
+    } catch (IOException e) {
+      log.error("Error reading UserLogin from request: {}", e.getMessage());
+      throw new RuntimeException("Error reading UserLogin", e);
+    }
   }
 
   @Override
