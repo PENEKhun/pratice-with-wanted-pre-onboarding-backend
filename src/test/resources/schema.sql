@@ -1,3 +1,6 @@
+drop table if exists wanted2023.user;
+drop table if exists wanted2023.job_posting;
+
 create table wanted2023.user
 (
     idx                      bigint auto_increment
