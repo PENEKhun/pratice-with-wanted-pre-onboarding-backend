@@ -6,9 +6,9 @@ spring:
         - classpath:schema.sql
     datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: "jdbc:mysql://localhost:3307/wanted2023"
+      url: "jdbc:mysql://localhost:3306/wanted2023"
       username: "root"
-      password: "testtest1234"
+      password: "test1234"
   jpa:
     database: mysql
     hibernate:

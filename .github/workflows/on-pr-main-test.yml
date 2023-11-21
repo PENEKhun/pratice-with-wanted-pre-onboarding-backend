@@ -23,10 +23,10 @@ jobs:
 
       - uses: mirromutth/mysql-action@v1.1
         with:
-          host port: 3307
-          container port: 3307
+          host port: 3306
+          container port: 3306
           mysql database: 'wanted2023'
-          mysql root password: 'testtest1234'
+          mysql root password: 'test1234'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
