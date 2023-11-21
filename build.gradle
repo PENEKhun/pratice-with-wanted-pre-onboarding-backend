@@ -38,8 +38,8 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     // 롬북
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     // 유효성 검사
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
@@ -48,7 +48,6 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools:3.0.4'
 
     /* 테스트 */
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
     testImplementation 'org.springframework.security:spring-security-test:6.0.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
@@ -89,4 +88,5 @@ bootJar {
     from("${asciidoctor.outputDir}") {
         into 'static/docs' // build/generated-snippets 에 있는 파일들을 static/docs 에 복사
     }
+    archiveFileName = 'wanted2023.jar'
 }
