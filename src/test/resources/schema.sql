@@ -1,5 +1,7 @@
+SET foreign_key_checks = 0;
 drop table if exists wanted2023.user;
 drop table if exists wanted2023.job_posting;
+SET foreign_key_checks = 1;
 
 create table wanted2023.user
 (
