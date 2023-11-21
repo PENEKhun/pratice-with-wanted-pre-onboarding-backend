@@ -22,9 +22,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      - name: Comment PR with test results
-        uses: unsplash/comment-on-pr@v1.2.0
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: ${{ always() }} # 테스트가 실패하여도 수행
         with:
-          message: |
-            ## Test Results
-            ${{ job.status }}
+          files: build/test-results/**/*.xml
