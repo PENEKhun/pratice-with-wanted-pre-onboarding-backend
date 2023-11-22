@@ -1,4 +1,4 @@
 [submodule "practice-with-wanted-pre-onboarding-backend-config"]
 	path = config
-	url = https://github.com/PENEKhun/practice-with-wanted-pre-onboarding-backend-config
+	url = https://github.com/PENEKhun/practice-with-wanted-pre-onboarding-backend-config.git
 	branch = main
