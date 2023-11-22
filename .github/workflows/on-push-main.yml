@@ -38,11 +38,9 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Export DOCKER_HUB_USERNAME
-        run: export DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} >> $GITHUB_ENV
-
-      - name: Docker Image Build
-        run: docker build --tag $DOCKER_HUB_USERNAME/wanted2023-api .
-
-      - name: Push to Docker Hub
-        run: docker push $DOCKER_HUB_USERNAME/wanted2023-api
+      - name: Docker Image Build And Deploy
+        run: |
+          docker build --tag $DOCKER_HUB_USERNAME/wanted2023-api .
+          docker push $DOCKER_HUB_USERNAME/wanted2023-api
+        env:
+          DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
