@@ -6,7 +6,8 @@ plugins {
 }
 
 group = 'org.penekhun'
-version = '0.0.1-SNAPSHOT'
+version = ''
+archivesBaseName = 'wanted2023'
 
 java {
     sourceCompatibility = '17'
@@ -88,5 +89,4 @@ bootJar {
     from("${asciidoctor.outputDir}") {
         into 'static/docs' // build/generated-snippets 에 있는 파일들을 static/docs 에 복사
     }
-    archiveFileName = 'wanted2023.jar'
 }
