@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PENEKHUN_GITHUB_TOKEN }}
+          submodules: true
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
