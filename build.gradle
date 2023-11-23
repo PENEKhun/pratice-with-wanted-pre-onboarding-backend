@@ -90,3 +90,12 @@ bootJar {
         into 'static/docs' // build/generated-snippets 에 있는 파일들을 static/docs 에 복사
     }
 }
+
+tasks.register('copyYml') {
+    group = 'build setup'
+    description = '서브모듈에 담긴 yml 파일을 소스루트에 복사합니다.'
+    copy {
+        from 'config'
+        into 'src/main/resources'
+    }
+}

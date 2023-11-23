@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PENEKHUN_GITHUB_TOKEN }}
+          submodules: true
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
@@ -26,8 +29,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Copy .yml file to source path
+        run: ./gradlew copyYml
+
       - name: Build with Gradle
-        run: SPRING_PROFILES_ACTIVE=test ./gradlew clean build
+        run: SPRING_PROFILES_ACTIVE=deploy ./gradlew clean build
 
       - name: Install Docker buildx
         uses: docker/setup-buildx-action@v2.9.1
