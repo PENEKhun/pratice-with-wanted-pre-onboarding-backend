@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 서브모듈에서 불러온 YML 파일 ###
+src/main/resources/application*.yml
