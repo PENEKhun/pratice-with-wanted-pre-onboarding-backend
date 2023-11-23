@@ -34,6 +34,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Copy .yml file to source path
+        run: ./gradlew copyYml
+
       - name: Build with Gradle
         run: SPRING_PROFILES_ACTIVE=deploy ./gradlew clean build
 
