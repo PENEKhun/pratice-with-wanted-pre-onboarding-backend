@@ -27,7 +27,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: SPRING_PROFILES_ACTIVE=test ./gradlew clean build
+        run: SPRING_PROFILES_ACTIVE=deploy ./gradlew clean build
 
       - name: Install Docker buildx
         uses: docker/setup-buildx-action@v2.9.1
