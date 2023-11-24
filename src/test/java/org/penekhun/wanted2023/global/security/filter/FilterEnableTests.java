@@ -4,13 +4,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.penekhun.wanted2023.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.web.FilterChainProxy;
 
-@SpringBootTest
 @DisplayName("사용자 정의 필터 활성화 확인 테스트")
-class FilterEnableTests {
+class FilterEnableTests extends IntegrationTestSupport {
 
   @Autowired
   private FilterChainProxy filterChainProxy;

@@ -20,12 +20,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.penekhun.wanted2023.IntegrationTestSupport;
 import org.penekhun.wanted2023.global.security.auth.CustomUser;
 import org.penekhun.wanted2023.global.security.auth.CustomUserDetailsService;
 import org.penekhun.wanted2023.user.entity.PersonalUserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -39,10 +39,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
-class JwtTokenGenFilterTest {
+class JwtTokenGenFilterTest extends IntegrationTestSupport {
 
   @Autowired
   protected MockMvc mockMvc;
