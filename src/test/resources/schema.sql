@@ -1,9 +1,4 @@
-SET foreign_key_checks = 0;
-drop table if exists wanted2023.user;
-drop table if exists wanted2023.job_posting;
-SET foreign_key_checks = 1;
-
-create table wanted2023.user
+create table user
 (
     idx                      bigint auto_increment
         primary key,
@@ -21,7 +16,7 @@ create table wanted2023.user
     deleted_at               datetime                       null
 );
 
-create table wanted2023.job_posting
+create table job_posting
 (
     idx              bigint auto_increment
         primary key,
@@ -34,13 +29,13 @@ create table wanted2023.job_posting
     updated_at       datetime      not null,
     deleted_at       datetime      null,
     constraint job_posting_user_idx_fk
-        foreign key (company_id) references wanted2023.user (idx)
+        foreign key (company_id) references user (idx)
 )
     comment '채용 공고';
 
 create index job_posting_idx_index
-    on wanted2023.job_posting (idx);
+    on job_posting (idx);
 
 create index user_idx_index
-    on wanted2023.user (idx);
+    on user (idx);
 

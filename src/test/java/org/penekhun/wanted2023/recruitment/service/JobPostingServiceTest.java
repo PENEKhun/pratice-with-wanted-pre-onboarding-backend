@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.penekhun.wanted2023.IntegrationTestSupport;
 import org.penekhun.wanted2023.global.exception.CustomException;
 import org.penekhun.wanted2023.global.exception.ExceptionCode;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
@@ -25,16 +26,14 @@ import org.penekhun.wanted2023.recruitment.repository.JobPostingRepository;
 import org.penekhun.wanted2023.user.entity.EnterpriseUserAccount;
 import org.penekhun.wanted2023.user.repository.EnterpriseAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@SpringBootTest
 @DisplayName("JobPostingService 테스트")
-class JobPostingServiceTest {
+class JobPostingServiceTest extends IntegrationTestSupport {
 
 
   @Autowired
