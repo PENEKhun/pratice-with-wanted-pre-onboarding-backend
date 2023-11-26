@@ -13,20 +13,9 @@ services:
   wanted2023-app:
     image: penekhun/wanted2023-api:latest
     ports:
-      - "80:8080"
+      - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: local
-      # todo 프로파일을 유동적으로 주입할 수 있게 하기
-      # todo + 중복되는 service는 모듈화 할수 있는지 알아보고 적용 할 것
-
-      # todo 그리고 로컬은 굳이 도커 컴포즈를 써야하나 ? 라는 고민?
-      # todo 로컬용 도커 컴포즈는 그냥 외부접속 환경으로 mysql만 실행되겠끔 만들까?
-      # todo 이것도 괜찮은 방법일듯 ?
-
-      # todo 그리고 이 부분 다 만들면... github runner를 self-host로 해서 트리거 이벤트 발생하게
-      # todo 실제 서버에서 구동되게 해야지
-
-      # todo 이 작업의 찐 끝은 무중단 배포 구현 해보기
     depends_on:
       - wanted2023-mysql
     restart: always
