@@ -2,6 +2,7 @@ version: '3'
 services:
   wanted2023-mysql:
     image: mysql:8
+    container_name: wanted2023-mysql
     environment:
       MYSQL_ROOT_PASSWORD: test1234
       MYSQL_DATABASE: wanted2023
@@ -12,11 +13,12 @@ services:
       - ./src/test/resources:/docker-entrypoint-initdb.d
 
   wanted2023-app:
-    image: penekhun/wanted2023-api:latest
+    image: wanted2023.azurecr.io/wanted2023-api
+    container_name: wanted2023-app
     ports:
       - "80:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-local}
     depends_on:
       - wanted2023-mysql
     restart: always
