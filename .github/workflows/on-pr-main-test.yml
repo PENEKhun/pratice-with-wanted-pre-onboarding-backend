@@ -45,8 +45,12 @@ jobs:
       - name: Login to Azure Container Registry
         run: docker login -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }} ${{ secrets.AZURE_REGISTRY_SERVER }}
 
-      - name: Docker Image Build And Deploy
+      - name: Docker Compose Build And Deploy
         run: |
-          docker build . -t ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
-          docker push ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
+          docker-compose build
+          docker-compose push
+#      - name: Docker Image Build And Deploy
+#        run: |
+#          docker build . -t ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
+#          docker push ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
 
