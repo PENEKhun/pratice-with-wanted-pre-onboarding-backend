@@ -51,7 +51,7 @@ jobs:
           docker push ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
 
   deploy:
-    runs-on: [ self-hosted, development ]
+    runs-on: [ self-hosted, dev ]
     needs: test
 
     steps:
@@ -59,7 +59,7 @@ jobs:
         with:
           token: ${{ secrets.PENEKHUN_GITHUB_TOKEN }}
           submodules: true
-          
+
       - name: Login to Azure Container Registry
         run: docker login -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }} ${{ secrets.AZURE_REGISTRY_SERVER }}
 
@@ -67,4 +67,4 @@ jobs:
         run: docker pull ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
 
       - name: run docker application
-        run: docker-compose up -d
+        run: SPRING_PROFILES_ACTIVE=dev docker-compose up -d
