@@ -5,6 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: test1234
       MYSQL_DATABASE: wanted2023
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
     volumes:
