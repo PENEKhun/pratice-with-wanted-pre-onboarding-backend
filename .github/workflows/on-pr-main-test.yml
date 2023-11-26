@@ -71,10 +71,10 @@ jobs:
           fi
 
       - name: Login to Azure Container Registry
-        run: docker login -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }} ${{ secrets.AZURE_REGISTRY_SERVER }}
+        run: sudo docker login -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }} ${{ secrets.AZURE_REGISTRY_SERVER }}
 
       - name: Pull Docker image from Azure Container Registry
-        run: docker pull ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
+        run: sudo docker pull ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
 
       - name: run docker application
         run: SPRING_PROFILES_ACTIVE=dev docker-compose up -d
