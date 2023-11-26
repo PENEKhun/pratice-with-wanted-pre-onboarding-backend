@@ -41,7 +41,7 @@ jobs:
 
   deploy-dev-server:
     runs-on: [ self-hosted, dev ]
-    needs: test
+    needs: test-and-docker-deploy
 
     steps:
       - uses: actions/checkout@v2
