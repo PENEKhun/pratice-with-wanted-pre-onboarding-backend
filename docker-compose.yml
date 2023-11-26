@@ -18,3 +18,4 @@ services:
       SPRING_PROFILES_ACTIVE: local
     depends_on:
       - wanted2023-mysql
+    restart: always
