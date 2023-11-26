@@ -47,8 +47,8 @@ jobs:
 
       - name: Docker Image Build And Deploy
         run: |
-          docker build . -t ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
-          docker push ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
+          docker build . -t ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:latest
+          docker push ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:latest
 
   deploy:
     runs-on: [ self-hosted, dev ]
@@ -82,7 +82,7 @@ jobs:
         run: sudo docker login -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }} ${{ secrets.AZURE_REGISTRY_SERVER }}
 
       - name: Pull Docker image from Azure Container Registry
-        run: sudo docker pull ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:${{ github.sha }}
+        run: sudo docker pull ${{ secrets.AZURE_REGISTRY_SERVER }}/wanted2023-api:latest
 
       - name: run docker application
         run: SPRING_PROFILES_ACTIVE=dev docker-compose up -d
