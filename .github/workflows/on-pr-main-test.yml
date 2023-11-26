@@ -60,6 +60,16 @@ jobs:
           token: ${{ secrets.PENEKHUN_GITHUB_TOKEN }}
           submodules: true
 
+      - name: Install Docker if not existed
+        run: |
+          if ! command -v docker &> /dev/null
+          then
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sudo sh get-docker.sh
+            sudo usermod -aG docker $USER
+            newgrp docker
+          fi
+
       - name: Login to Azure Container Registry
         run: docker login -u ${{ secrets.AZURE_REGISTRY_USERNAME }} -p ${{ secrets.AZURE_REGISTRY_PASSWORD }} ${{ secrets.AZURE_REGISTRY_SERVER }}
 
