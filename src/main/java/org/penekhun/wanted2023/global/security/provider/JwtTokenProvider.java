@@ -1,6 +1,7 @@
 package org.penekhun.wanted2023.global.security.provider;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -10,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.penekhun.wanted2023.global.exception.CustomException;
+import org.penekhun.wanted2023.global.exception.ExceptionCode;
 import org.penekhun.wanted2023.global.security.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +78,12 @@ public class JwtTokenProvider implements InitializingBean {
   }
 
   public boolean validateToken(String accessToken) {
-    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+    try {
+      Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+    } catch (ExpiredJwtException e) {
+      throw new CustomException(ExceptionCode.EXPIRED_TOKEN);
+    }
+
     return true;
   }
 
