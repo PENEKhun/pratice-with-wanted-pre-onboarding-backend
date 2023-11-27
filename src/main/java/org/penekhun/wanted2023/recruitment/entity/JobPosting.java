@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
@@ -25,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "job_posting", schema = "wanted2023")
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE idx = ?")
 @Where(clause = "deleted_at IS NULL")
@@ -70,10 +72,6 @@ public class JobPosting {
     this.recruitPosition = recruitPosition;
     this.description = description;
     this.requiredSkill = requiredSkill;
-  }
-
-  public JobPosting() {
-
   }
 
   public static JobPosting of(JobPostingCreateReq jobPostingReq) {
