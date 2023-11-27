@@ -48,12 +48,7 @@ public class JobPostingService {
       throw new CustomException(ExceptionCode.INVALID_REQUEST);
     }
 
-    JobPosting jobPosting = JobPosting.builder()
-        .description(jobPostingReq.description())
-        .recruitPosition(jobPostingReq.recruitPosition())
-        .recruitReward(jobPostingReq.recruitReward())
-        .requiredSkill(jobPostingReq.requiredSkill())
-        .build();
+    JobPosting jobPosting = JobPosting.of(jobPostingReq);
     jobPosting.setCompany(enterpriseUser);
     jobPostingRepository.save(jobPosting);
 

@@ -76,6 +76,15 @@ public class JobPosting {
 
   }
 
+  public static JobPosting of(JobPostingCreateReq jobPostingReq) {
+    return JobPosting.builder()
+        .description(jobPostingReq.description())
+        .recruitPosition(jobPostingReq.recruitPosition())
+        .recruitReward(jobPostingReq.recruitReward())
+        .requiredSkill(jobPostingReq.requiredSkill())
+        .build();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
