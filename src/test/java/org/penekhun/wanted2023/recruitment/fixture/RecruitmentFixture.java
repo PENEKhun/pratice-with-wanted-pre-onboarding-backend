@@ -3,6 +3,7 @@ package org.penekhun.wanted2023.recruitment.fixture;
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
+import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 import net.jqwik.api.Arbitraries;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
@@ -12,7 +13,7 @@ public class RecruitmentFixture {
 
   public static JobPosting CreateJobPosting() {
     FixtureMonkey fixture = FixtureMonkey.builder()
-        .objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
+        .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
         .build();
 
     return fixture.giveMeBuilder(JobPosting.class)
