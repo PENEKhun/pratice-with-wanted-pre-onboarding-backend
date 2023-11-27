@@ -26,6 +26,16 @@ public class JobPostingService {
 
   private final JobPostingRepository jobPostingRepository;
 
+  private JobPostingCreateRes createResponse(JobPosting jobPosting) {
+    return JobPostingCreateRes.builder()
+        .id(jobPosting.getId())
+        .recruitReward(jobPosting.getRecruitReward())
+        .recruitPosition(jobPosting.getRecruitPosition())
+        .description(jobPosting.getDescription())
+        .requiredSkill(jobPosting.getRequiredSkill())
+        .build();
+  }
+
   private Predicate<JobPosting> myJobPost(
       EnterpriseUserAccount enterpriseUser) {
     return jobPosting -> jobPosting.getCompany().equals(enterpriseUser);
@@ -47,13 +57,7 @@ public class JobPostingService {
     jobPosting.setCompany(enterpriseUser);
     jobPostingRepository.save(jobPosting);
 
-    return JobPostingCreateRes.builder()
-        .id(jobPosting.getId())
-        .recruitReward(jobPosting.getRecruitReward())
-        .recruitPosition(jobPosting.getRecruitPosition())
-        .description(jobPosting.getDescription())
-        .requiredSkill(jobPosting.getRequiredSkill())
-        .build();
+    return createResponse(jobPosting);
   }
 
   @Transactional
@@ -94,12 +98,6 @@ public class JobPostingService {
         .orElseThrow(() -> new CustomException(ExceptionCode.INVALID_REQUEST));
 
     jobPosting.updatePartly(jobPostingReq);
-    return JobPostingCreateRes.builder()
-        .id(jobPosting.getId())
-        .recruitReward(jobPosting.getRecruitReward())
-        .recruitPosition(jobPosting.getRecruitPosition())
-        .description(jobPosting.getDescription())
-        .requiredSkill(jobPosting.getRequiredSkill())
-        .build();
+    return createResponse(jobPosting);
   }
 }
