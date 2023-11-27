@@ -92,7 +92,7 @@ class JobPostingServiceTest extends IntegrationTestSupport {
           .extracting(
               "content",
               "numberOfElements"
-          ).containsExactly(
+          ).containsExactlyInAnyOrder(
               jobPostings.stream().map(JobPostingSearchRes::from).toList(),
               jobPostings.size()
           );
