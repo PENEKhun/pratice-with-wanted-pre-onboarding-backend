@@ -99,12 +99,7 @@ public class JobPosting {
 
   @Override
   public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + (company != null ? company.hashCode() : 0);
-    result = 31 * result + recruitReward;
-    result = 31 * result + (recruitPosition != null ? recruitPosition.hashCode() : 0);
-    result = 31 * result + (description != null ? description.hashCode() : 0);
-    return result;
+    return Objects.hashCode(id);
   }
 
   public void setCompany(EnterpriseUserAccount company) {
