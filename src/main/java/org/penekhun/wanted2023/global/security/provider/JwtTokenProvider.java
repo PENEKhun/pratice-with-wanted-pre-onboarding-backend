@@ -79,12 +79,18 @@ public class JwtTokenProvider implements InitializingBean {
 
   public boolean validateToken(String accessToken) {
     try {
-      Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+      parseToken(accessToken);
     } catch (ExpiredJwtException e) {
       throw new CustomException(ExceptionCode.EXPIRED_TOKEN);
+    } catch (Exception e) {
+      return false;
     }
-
+    
     return true;
+  }
+
+  private void parseToken(String accessToken) {
+    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
   }
 
 }
