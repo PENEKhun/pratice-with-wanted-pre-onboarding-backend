@@ -48,10 +48,8 @@ public class JwtTokenProvider implements InitializingBean {
     this.key = Keys.hmacShaKeyFor(keyBytes);
   }
 
-  public Map<String, String> createToken(String username) {
-
-    long now = (new Date()).getTime();
-    Date validity = new Date(now + this.tokenValidityInMilliseconds);
+  public Map<String, String> createToken(String username, Date now) {
+    Date validity = calcTokenExpired(now);
 
     Map<String, String> map = new HashMap<>();
     map.put(TOKEN, Jwts.builder()
@@ -62,6 +60,11 @@ public class JwtTokenProvider implements InitializingBean {
     map.put("tokenExpired", String.valueOf(validity));
 
     return map;
+  }
+
+  private Date calcTokenExpired(Date date) {
+    long now = date.getTime();
+    return new Date(now + this.tokenValidityInMilliseconds);
   }
 
   public Authentication getAuthentication(String token) {
@@ -85,7 +88,7 @@ public class JwtTokenProvider implements InitializingBean {
     } catch (Exception e) {
       return false;
     }
-    
+
     return true;
   }
 

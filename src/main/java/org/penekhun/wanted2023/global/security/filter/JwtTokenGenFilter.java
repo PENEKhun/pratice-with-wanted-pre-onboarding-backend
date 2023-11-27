@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.penekhun.wanted2023.global.security.auth.CustomUser;
 import org.penekhun.wanted2023.global.security.provider.JwtTokenProvider;
@@ -61,7 +62,7 @@ public class JwtTokenGenFilter extends UsernamePasswordAuthenticationFilter {
 
     CustomUser principalDetails = (CustomUser) authResult.getPrincipal();
 
-    String jwtToken = tokenProvider.createToken(principalDetails.getUsername())
+    String jwtToken = tokenProvider.createToken(principalDetails.getUsername(), new Date())
         .get("token");
 
     response.addHeader(AUTHORIZATION_HEADER, TOKEN_PREFIX + jwtToken);
