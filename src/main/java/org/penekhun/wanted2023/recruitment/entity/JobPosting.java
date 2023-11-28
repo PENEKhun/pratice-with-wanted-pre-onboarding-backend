@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Table(name = "job_posting", schema = "wanted2023")
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE idx = ?")
 @Where(clause = "deleted_at IS NULL")
@@ -66,7 +66,7 @@ public class JobPosting {
   private LocalDateTime deletedAt;
 
   @Builder
-  public JobPosting(int recruitReward, String recruitPosition, String description,
+  private JobPosting(int recruitReward, String recruitPosition, String description,
       String requiredSkill) {
     this.recruitReward = recruitReward;
     this.recruitPosition = recruitPosition;
