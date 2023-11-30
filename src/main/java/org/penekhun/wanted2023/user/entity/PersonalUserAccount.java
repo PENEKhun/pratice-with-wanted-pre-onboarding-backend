@@ -6,10 +6,11 @@ import jakarta.persistence.Entity;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.penekhun.wanted2023.global.security.dto.SecurityRole.ROLES.WITHOUT_PREFIX;
 
 @Entity
 @NoArgsConstructor
-@DiscriminatorValue("PERSONAL")
+@DiscriminatorValue(WITHOUT_PREFIX.USER)
 public class PersonalUserAccount extends UserAccount {
 
   @Column(name = "personal_name")

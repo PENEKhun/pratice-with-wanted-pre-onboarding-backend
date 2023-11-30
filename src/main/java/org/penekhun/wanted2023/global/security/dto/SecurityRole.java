@@ -28,5 +28,11 @@ public enum SecurityRole implements GrantedAuthority {
 
     public static final String USER = "ROLE_USER";
     public static final String ENTERPRISE = "ROLE_ENTERPRISE";
+    
+    public static class WITHOUT_PREFIX {
+
+      public static final String USER = "USER";
+      public static final String ENTERPRISE = "ENTERPRISE";
+    }
   }
 }

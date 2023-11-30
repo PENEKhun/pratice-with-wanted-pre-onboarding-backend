@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.penekhun.wanted2023.recruitment.dto.request.JobPostingCreateReq;
@@ -25,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Table(name = "job_posting", schema = "wanted2023")
 @SQLDelete(sql = "UPDATE user SET deleted_at = NOW() WHERE idx = ?")
 @Where(clause = "deleted_at IS NULL")
@@ -64,7 +66,7 @@ public class JobPosting {
   private LocalDateTime deletedAt;
 
   @Builder
-  public JobPosting(int recruitReward, String recruitPosition, String description,
+  private JobPosting(int recruitReward, String recruitPosition, String description,
       String requiredSkill) {
     this.recruitReward = recruitReward;
     this.recruitPosition = recruitPosition;
@@ -72,8 +74,13 @@ public class JobPosting {
     this.requiredSkill = requiredSkill;
   }
 
-  public JobPosting() {
-
+  public static JobPosting of(JobPostingCreateReq jobPostingReq) {
+    return JobPosting.builder()
+        .description(jobPostingReq.description())
+        .recruitPosition(jobPostingReq.recruitPosition())
+        .recruitReward(jobPostingReq.recruitReward())
+        .requiredSkill(jobPostingReq.requiredSkill())
+        .build();
   }
 
   @Override
@@ -92,12 +99,7 @@ public class JobPosting {
 
   @Override
   public int hashCode() {
-    int result = (int) (id ^ (id >>> 32));
-    result = 31 * result + (company != null ? company.hashCode() : 0);
-    result = 31 * result + recruitReward;
-    result = 31 * result + (recruitPosition != null ? recruitPosition.hashCode() : 0);
-    result = 31 * result + (description != null ? description.hashCode() : 0);
-    return result;
+    return Objects.hashCode(id);
   }
 
   public void setCompany(EnterpriseUserAccount company) {

@@ -74,7 +74,7 @@ class JobPostingServiceTest extends IntegrationTestSupport {
       enterpriseAccountRepository.delete(enterpriseAccount);
     }
 
-    @RepeatedTest(5)
+    @RepeatedTest(10)
     @DisplayName("모든 인자가 정상일때 정상적으로 채용 공고를 조회합니다.")
     void happyCase() {
       // given
@@ -92,7 +92,7 @@ class JobPostingServiceTest extends IntegrationTestSupport {
           .extracting(
               "content",
               "numberOfElements"
-          ).containsExactly(
+          ).containsExactlyInAnyOrder(
               jobPostings.stream().map(JobPostingSearchRes::from).toList(),
               jobPostings.size()
           );

@@ -6,11 +6,12 @@ import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.penekhun.wanted2023.global.security.dto.SecurityRole.ROLES.WITHOUT_PREFIX;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@DiscriminatorValue("ENTERPRISE")
+@DiscriminatorValue(WITHOUT_PREFIX.ENTERPRISE)
 public class EnterpriseUserAccount extends UserAccount {
 
   @Column(name = "enterprise_name")

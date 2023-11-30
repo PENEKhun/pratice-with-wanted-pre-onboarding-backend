@@ -1,6 +1,7 @@
 package org.penekhun.wanted2023.global.security.provider;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -10,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.penekhun.wanted2023.global.exception.CustomException;
+import org.penekhun.wanted2023.global.exception.ExceptionCode;
 import org.penekhun.wanted2023.global.security.auth.CustomUserDetailsService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,10 +48,8 @@ public class JwtTokenProvider implements InitializingBean {
     this.key = Keys.hmacShaKeyFor(keyBytes);
   }
 
-  public Map<String, String> createToken(String username) {
-
-    long now = (new Date()).getTime();
-    Date validity = new Date(now + this.tokenValidityInMilliseconds);
+  public Map<String, String> createToken(String username, Date now) {
+    Date validity = calcTokenExpired(now);
 
     Map<String, String> map = new HashMap<>();
     map.put(TOKEN, Jwts.builder()
@@ -59,6 +60,11 @@ public class JwtTokenProvider implements InitializingBean {
     map.put("tokenExpired", String.valueOf(validity));
 
     return map;
+  }
+
+  private Date calcTokenExpired(Date date) {
+    long now = date.getTime();
+    return new Date(now + this.tokenValidityInMilliseconds);
   }
 
   public Authentication getAuthentication(String token) {
@@ -75,8 +81,19 @@ public class JwtTokenProvider implements InitializingBean {
   }
 
   public boolean validateToken(String accessToken) {
-    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+    try {
+      parseToken(accessToken);
+    } catch (ExpiredJwtException e) {
+      throw new CustomException(ExceptionCode.EXPIRED_TOKEN);
+    } catch (Exception e) {
+      return false;
+    }
+
     return true;
+  }
+
+  private void parseToken(String accessToken) {
+    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
   }
 
 }
